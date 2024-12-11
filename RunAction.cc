@@ -38,6 +38,17 @@ RunAction::RunAction(): photonHits(40, 0)
       columnName << "Photons_Generated_perEvent_on_Bar_" << l;
       man->CreateNtupleDColumn(columnName.str());
   }
+  man->CreateNtupleDColumn("Particle_Momentum_MeV");
+  man->CreateNtupleDColumn("Particle_Momentum_GeV");
+  man->CreateNtupleDColumn("angle");  //162
+  man->CreateNtupleDColumn("Copy_num_Bar_Traversed_A"); //163
+  man->CreateNtupleDColumn("Copy_num_Bar_Traversed_B"); //164
+ // man->CreateNtupleDColumn("Total_Energy_Deposition");  
+  //man->CreateNtupleDColumn("Total_dEdx");  
+  //man->CreateNtupleDColumn("Total_Photons_Generated"); 
+  //man->CreateNtupleDColumn("Total_Photons_Detected"); 
+  //man->CreateNtupleDColumn("Traversed_Bars_A"); 
+  //man->CreateNtupleDColumn("Traversed_Bars_B"); 
 
   man->FinishNtuple(1);
 

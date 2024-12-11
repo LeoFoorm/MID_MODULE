@@ -221,7 +221,7 @@ void DetectorConstruction::ConstructMIDModule()
   G4ThreeVector  positionSA = G4ThreeVector(0, 66.56*cm, 0);
 
   SolidSA = new G4Box("SolidSA", SA_X, SA_Y, SA_Z );
-  LogicalSA = new G4LogicalVolume(SolidSA, steel, "LogicSA");
+ LogicalSA = new G4LogicalVolume(SolidSA, steel, "LogicSA");
   PhysicalSA = new G4PVPlacement(0, positionSA, LogicalSA, "PhysicalSA", LogicWorld, false, 0, true);
 
 
@@ -234,7 +234,7 @@ void DetectorConstruction::ConstructMIDModule()
   G4ThreeVector positioncube = G4ThreeVector(0, 3.0077 * m, 0);
   SolidCube = new G4Box("SolidCube", BcubeX, BcubeY, BcubeZ);
   LogicCube = new G4LogicalVolume(SolidCube, worldMaterial, "LogicCube");
-  PhysicalCube = new G4PVPlacement(0, positioncube, LogicCube, "PhysicalCube", LogicWorld, false, 0, true);
+ PhysicalCube = new G4PVPlacement(0, positioncube, LogicCube, "PhysicalCube", LogicWorld, false, 0, true);
 
 }
 

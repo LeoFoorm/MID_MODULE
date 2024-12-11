@@ -14,6 +14,7 @@
 
 
 
+
 class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
  public:

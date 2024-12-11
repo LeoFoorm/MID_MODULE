@@ -21,7 +21,6 @@ public:
  virtual void EndOfEventAction(const G4Event*);
 
 
-//THIS IS FOR DETECTED PHOTONS ¡<PER EVENT>!
 
 void Add_DetectedPhotons_event_A_SiPMs (G4int sipmID_a)
 {
@@ -99,7 +98,7 @@ std::vector<G4double> GetdEdx_B() const { return fTotaldEdx_B; }
 //---------------------------------------------------------
 
 
-void AddPhotonG_UsingEdep_A(G4int PhotonGen_a, G4double generated_photons_A) //el error era que a esto lo ponia como que iba a regresar un vector de enteros
+void AddPhotonG_UsingEdep_A(G4int PhotonGen_a, G4double generated_photons_A) 
  {
     if (PhotonGen_a >= 0 && PhotonGen_a < fGenerated_photons_A.size())
     {
@@ -120,6 +119,49 @@ void AddPhotonG_UsingEdep_B(G4int PhotonGen_b, G4double generated_photons_B)
 
 
 
+//---------------------------------------------------------
+
+
+void AddTraversedBar_A (G4int barA){
+
+        if (std::find(traversed_Bars_A.begin(), traversed_Bars_A.end(), barA) == traversed_Bars_A.end()) {  
+          traversed_Bars_A.push_back(barA);
+        }
+}
+std::vector<G4int> GetTraversedBars_A() const {return traversed_Bars_A;}
+
+void AddTraversedBar_B (G4int barB){
+    
+        if (std::find(traversed_Bars_B.begin(), traversed_Bars_B.end(), barB) == traversed_Bars_B.end()) {
+           traversed_Bars_B.push_back(barB);
+        }
+}
+std::vector<G4int> GetTraversedBars_B() const {return traversed_Bars_B;}
+
+
+//---------------------------------------------------------
+
+
+
+//---------------------------------------------------------
+//X TODO ESTO
+
+//void AddTraversedBar (G4int bar, char group){
+  //  if(group == 'A'){
+    //   if (std::find(traversed_Bars_A.begin(), traversed_Bars_A.end(), bar) == traversed_Bars_A.end()) {
+     //       traversed_Bars_A.push_back(bar); // Evita duplicados
+      //  } 
+   // } else if (group == 'B'){
+     //   if (std::find(traversed_Bars_B.begin(), traversed_Bars_B.end(), bar) == traversed_Bars_B.end()) {
+       //     traversed_Bars_B.push_back(bar);
+        //}
+   // }
+//}
+
+//const std::vector<G4int>& GetTraversedBars(char group) const {
+  //  return (group == 'A') ? traversed_Bars_A : traversed_Bars_B;
+//}
+//---------------------------------------------------------
 
 
 private:
@@ -137,7 +179,19 @@ std::vector<G4double> fTotaldEdx_B;
 std::vector<G4int> fGenerated_photons_A;
 std::vector<G4int> fGenerated_photons_B;
 
+std::vector<G4int> traversed_Bars_A; //X
+std::vector<G4int> traversed_Bars_B; //X
+
+G4double TOTAL_Edep;
+G4double TOTAL_dEdx;
+G4double TOTAL_Detected_photons;
+G4double TOTAL_Generated_photons;
+ 
+
  G4int muonCount;
+
+ G4bool Hit_particle_passed_two_layers = false;
+ G4int Sumcopies;
 
 };
 

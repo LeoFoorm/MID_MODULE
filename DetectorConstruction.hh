@@ -40,18 +40,9 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     virtual G4VPhysicalVolume *Construct(); 
 
     void ConstructMIDModule();     
-   
-    //G4LogicalVolume *GetScoringVolumeA(G4int volA) const{
-      //if (volA >= 0 && volA < fScoringVolumes_A.size())
-      //{
-        //return fScoringVolumes_A[volA];
-      //}else {
-        //G4cerr << "Error: Invalid index for scoring volume A: " << volA << G4endl;
-        //return nullptr;
-    //}
-    //}
 
-    // TO RETRIEVE THE fScoringVolumes TO GET THE EDEP
+
+    // TO RETRIEVE THE fScoringVolumes FOR STEPPING ACTION
     const std::vector<G4LogicalVolume*>& GetScoringVolumesA() const {
     return fScoringVolumes_A;
     }

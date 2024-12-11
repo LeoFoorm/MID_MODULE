@@ -12,11 +12,11 @@ SensitiveDetector::~ SensitiveDetector()
 
 G4bool SensitiveDetector::ProcessHits(G4Step *aStep, G4TouchableHistory *ROhist)
 {
-    G4int evt = G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID(); 
+    G4int evt = G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID();
     G4Track *track = aStep->GetTrack();
     G4AnalysisManager *man = G4AnalysisManager::Instance(); 
-
     track->SetTrackStatus(fStopAndKill);
+
 
     G4StepPoint *preStepPoint = aStep->GetPreStepPoint();
     G4StepPoint *postStepPoint = aStep->GetPostStepPoint();
@@ -36,7 +36,7 @@ G4bool SensitiveDetector::ProcessHits(G4Step *aStep, G4TouchableHistory *ROhist)
     RunAction *runactionNonConst = const_cast<RunAction *>(runaction); 
    
     const EventAction* constEventAction = static_cast<const EventAction*>(G4RunManager::GetRunManager()->GetUserEventAction());
-    EventAction* eventAction = const_cast<EventAction*>(constEventAction);  // Correct the cast
+    EventAction* eventAction = const_cast<EventAction*>(constEventAction); 
   
         
    if (copynum >= 0 && copynum < 20) {
@@ -49,5 +49,11 @@ G4bool SensitiveDetector::ProcessHits(G4Step *aStep, G4TouchableHistory *ROhist)
     man->FillNtupleIColumn(0,0,evt); 
     man->AddNtupleRow(0); 
     
+     G4String particleName = track->GetDefinition()->GetParticleName();  // Get the particle type
+  // if (particleName == "opticalphoton") {
+    //    return false;  // Do not process anything else
+    //} else{
+    //G4cout << " PARTICLE TYPE: " << particleName << G4endl;}  // Print particle name
+
 }
 
