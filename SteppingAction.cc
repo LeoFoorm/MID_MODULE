@@ -32,7 +32,7 @@ G4TouchableHandle touchedbar = step->GetPreStepPoint()->GetTouchableHandle(); //
  G4Track* track = step->GetTrack();
 
  
-if(particle->GetParticleName()== "mu+"){
+if(particle->GetParticleName()== "pi+"){
    G4double dEdxStep_A = 0.0; 
    G4double dEdxStep_B = 0.0;
    G4double generated_photons_A = 0.0;
@@ -41,8 +41,8 @@ if(particle->GetParticleName()== "mu+"){
          if (std::find(scoringVolumesA.begin(), scoringVolumesA.end(), barvolume) != scoringVolumesA.end())
         {
 
-                G4int copyNumA = touchedbar->GetCopyNumber(); // Número de copia de la barra
-                fEventAction->AddTraversedBar_A(copyNumA);
+         G4int copyNumA = touchedbar->GetCopyNumber(); // Número de copia de la barra
+         fEventAction->AddTraversedBar_A(copyNumA);
     
          G4double edep_A = step->GetTotalEnergyDeposit();
          if (edep_A > 0.&& stepLength > 0.)
@@ -95,8 +95,6 @@ if(particle->GetParticleName()== "mu+"){
          }
          }
 
-
-       
         // Obtener el número de copia del volumen
         //G4int copynum = step->GetPreStepPoint()->GetTouchableHandle()->GetCopyNumber();
               //fEventAction->WorkingBars(copynum);  

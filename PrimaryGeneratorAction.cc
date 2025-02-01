@@ -8,7 +8,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
  fParticleGun = new G4ParticleGun(1); //argument is particle per event
 
  G4ParticleTable *particleTable = G4ParticleTable::GetParticleTable();
- G4ParticleDefinition *particle = particleTable->FindParticle("mu+"); 
+ G4ParticleDefinition *particle = particleTable->FindParticle("pi+"); 
  fParticleGun->SetParticleDefinition(particle);
 
 }
@@ -17,7 +17,6 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
 PrimaryGeneratorAction::~PrimaryGeneratorAction()
 {
  delete fParticleGun;
-
 }
 
 
@@ -53,12 +52,12 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
      fParticleGun->SetParticleMomentum(momentumParticle*GeV);
      fParticleGun->SetParticlePosition(position);
      fParticleGun->GeneratePrimaryVertex(anEvent);
-    //} 
+    
 
 G4cout << "" << G4endl;                                                            
-
- G4cout << "--> --> --> MOMENTUM FOR THIS EVENT: " << momentumParticle << " GeV/c \n" << G4endl;                                                            
-G4cout << "PARTICLE ANGLE : " <<angle << "\n"<<  G4endl;   
+G4cout << "------------------------------------------------------------" << G4endl;
+ G4cout << "MOMENTUM FOR THIS EVENT: " << momentumParticle << " GeV/c \n" << G4endl;                                                            
+G4cout << "PARTICLE ANGLE : " <<angle << "° \n"<<  G4endl;   
 
 G4AnalysisManager *man = G4AnalysisManager::Instance(); 
  man->FillNtupleDColumn(1, 160, momentum_onMeV); 

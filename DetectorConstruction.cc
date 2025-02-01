@@ -106,6 +106,11 @@ void DetectorConstruction::DefineMaterials()
  propmylar->AddProperty("RINDEX",energy, rindexmylar,numberOfEntries);
 
 
+ G4double density = steel->GetDensity(); // Densidad en unidades de Geant4
+        std::cout << "Material: " << steel->GetName() << std::endl;
+        std::cout << "Densidad: " << density/ (kg/m3)  << " kg/m^3" << std::endl;
+
+
  worldMaterial->SetMaterialPropertiesTable(propworld);
  plastic->SetMaterialPropertiesTable(prop);
  mirrorsurface->SetMaterialPropertiesTable(mirror);
@@ -126,7 +131,7 @@ void DetectorConstruction::ConstructMIDModule()
 //                        SiPM 
   G4double sipm_X = 0.3*cm;
   G4double sipm_Y = 0.3*cm;
-  G4double sipm_Z = 0.025*cm;
+  G4double sipm_Z = 0.01*cm;
   
   Solidsipm = new G4Box("Solidsipm", sipm_X, sipm_Y, sipm_Z );
 
@@ -222,7 +227,7 @@ void DetectorConstruction::ConstructMIDModule()
 
   SolidSA = new G4Box("SolidSA", SA_X, SA_Y, SA_Z );
  LogicalSA = new G4LogicalVolume(SolidSA, steel, "LogicSA");
-  PhysicalSA = new G4PVPlacement(0, positionSA, LogicalSA, "PhysicalSA", LogicWorld, false, 0, true);
+ PhysicalSA = new G4PVPlacement(0, positionSA, LogicalSA, "PhysicalSA", LogicWorld, false, 0, true);
 
 
 

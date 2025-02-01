@@ -43,12 +43,12 @@ RunAction::RunAction(): photonHits(40, 0)
   man->CreateNtupleDColumn("angle");  //162
   man->CreateNtupleDColumn("Copy_num_Bar_Traversed_A"); //163
   man->CreateNtupleDColumn("Copy_num_Bar_Traversed_B"); //164
- // man->CreateNtupleDColumn("Total_Energy_Deposition");  
-  //man->CreateNtupleDColumn("Total_dEdx");  
-  //man->CreateNtupleDColumn("Total_Photons_Generated"); 
-  //man->CreateNtupleDColumn("Total_Photons_Detected"); 
-  //man->CreateNtupleDColumn("Traversed_Bars_A"); 
-  //man->CreateNtupleDColumn("Traversed_Bars_B"); 
+  man->CreateNtupleIColumn("HIT_particle_passed_both_layers");  // 165
+
+  man->CreateNtupleDColumn("Total_Energy_Deposition");  //166
+  man->CreateNtupleDColumn("Total_dEdx");  //167
+  man->CreateNtupleIColumn("Total_Photons_Detected");  //168
+  man->CreateNtupleDColumn("Total_Photons_Generated");  //169 
 
   man->FinishNtuple(1);
 

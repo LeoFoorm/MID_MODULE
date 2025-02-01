@@ -44,7 +44,13 @@ int main(int argc,char** argv)
     }
     G4VisManager * visManager = new G4VisExecutive();
     visManager->Initialize();
+
     G4UImanager *UImanager = G4UImanager::GetUIpointer();
+
+   UImanager->ApplyCommand("/run/verbose 2");
+    UImanager->ApplyCommand("/control/verbose 2");
+    UImanager->ApplyCommand("/process/had/verbose 0");
+
     if(ui)
     {
     UImanager->ApplyCommand("/vis/open OGL");
@@ -70,6 +76,14 @@ int main(int argc,char** argv)
         G4String fileName = argv[1];
         UImanager->ApplyCommand(command+fileName);
     }
+
+ // Limpieza explícita de recursos
+    delete visManager;   // Eliminar el administrador de visualización
+    delete ui;           // Eliminar el UI Executive (si existe)
+    delete runManager;   // Eliminar el RunManager
+    G4cout << "Simulation finished successfully." << G4endl;
+
+
     return 0;
 }
 

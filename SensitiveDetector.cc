@@ -50,10 +50,6 @@ G4bool SensitiveDetector::ProcessHits(G4Step *aStep, G4TouchableHistory *ROhist)
     man->AddNtupleRow(0); 
     
      G4String particleName = track->GetDefinition()->GetParticleName();  // Get the particle type
-  // if (particleName == "opticalphoton") {
-    //    return false;  // Do not process anything else
-    //} else{
-    //G4cout << " PARTICLE TYPE: " << particleName << G4endl;}  // Print particle name
-
+  
 }
 
