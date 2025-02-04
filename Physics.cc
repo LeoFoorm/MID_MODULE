@@ -23,14 +23,9 @@ PhysicsList::PhysicsList()
 	RegisterPhysics( new G4IonPhysics() );
 
 
-
-	// Register optical physics and configure scintillation properties				In order to set the G4Scintillation
     G4OpticalPhysics* opticalPhysics = new G4OpticalPhysics();
 	RegisterPhysics(opticalPhysics);
 
-	
-
-	//RegisterPhysics (new G4OpticalPhysics()); 
 	
 	//RegisterPhysics (new G4RadioactiveDecayPhysics());
 

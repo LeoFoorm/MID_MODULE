@@ -8,7 +8,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
  fParticleGun = new G4ParticleGun(1); //argument is particle per event
 
  G4ParticleTable *particleTable = G4ParticleTable::GetParticleTable();
- G4ParticleDefinition *particle = particleTable->FindParticle("pi+"); 
+ G4ParticleDefinition *particle = particleTable->FindParticle("mu+"); 
  fParticleGun->SetParticleDefinition(particle);
 
 }

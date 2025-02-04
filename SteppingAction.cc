@@ -32,7 +32,7 @@ G4TouchableHandle touchedbar = step->GetPreStepPoint()->GetTouchableHandle(); //
  G4Track* track = step->GetTrack();
 
  
-if(particle->GetParticleName()== "pi+"){
+if(particle->GetParticleName()== "mu+"){
    G4double dEdxStep_A = 0.0; 
    G4double dEdxStep_B = 0.0;
    G4double generated_photons_A = 0.0;
@@ -95,12 +95,12 @@ if(particle->GetParticleName()== "pi+"){
          }
          }
 
-        // Obtener el número de copia del volumen
-        //G4int copynum = step->GetPreStepPoint()->GetTouchableHandle()->GetCopyNumber();
-              //fEventAction->WorkingBars(copynum);  
 }
 
 }
+
+
+
 
 
 //Para agregar información del numero de copia atravesada tuve que modificar  lo que esta con "//" y todo lo que tenia a "touchedVolume". 

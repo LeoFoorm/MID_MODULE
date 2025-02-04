@@ -20,22 +20,9 @@ class RunAction : public G4UserRunAction
   virtual void EndOfRunAction(const G4Run*);
 
 
-  void Add_DetectedPhotons_run_all_SiPMs(G4int sipmID) 
-  {
-    if (sipmID >= 0 && sipmID < 40) 
-    {
-        photonHits[sipmID]++;
-    }
-}
-std::vector<G4int> GetPhotonHits() const 
-{
-    return photonHits;
-}
-
-
 private:
  
- std::vector<G4int> photonHits;
+
  
 };
 
