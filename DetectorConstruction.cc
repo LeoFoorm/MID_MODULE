@@ -131,7 +131,7 @@ void DetectorConstruction::ConstructMIDModule()
 //                        SiPM 
   G4double sipm_X = 0.3*cm;
   G4double sipm_Y = 0.3*cm;
-  G4double sipm_Z = 0.025*cm;
+  G4double sipm_Z = 0.01*cm;
   
   Solidsipm = new G4Box("Solidsipm", sipm_X, sipm_Y, sipm_Z );
 

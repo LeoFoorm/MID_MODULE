@@ -21,7 +21,7 @@ const std::vector<G4LogicalVolume*>& scoringVolumesA = detectorconstruction->Get
 const std::vector<G4LogicalVolume*>& scoringVolumesB = detectorconstruction->GetScoringVolumesB();
    
 
-G4TouchableHandle touchedbar = step->GetPreStepPoint()->GetTouchableHandle(); //
+G4TouchableHandle touchedbar = step->GetPreStepPoint()->GetTouchableHandle(); 
  G4LogicalVolume* barvolume = touchedbar->GetVolume()->GetLogicalVolume();
 
 
@@ -31,8 +31,11 @@ G4TouchableHandle touchedbar = step->GetPreStepPoint()->GetTouchableHandle(); //
  
  G4Track* track = step->GetTrack();
 
+
+G4StepPoint *PreStep = step->GetPreStepPoint();
+  
  
-if(particle->GetParticleName()== "mu+"){
+if(particle->GetParticleName()== "pi+"){
    G4double dEdxStep_A = 0.0; 
    G4double dEdxStep_B = 0.0;
    G4double generated_photons_A = 0.0;
@@ -95,12 +98,12 @@ if(particle->GetParticleName()== "mu+"){
          }
          }
 
+        // Obtener el número de copia del volumen
+        //G4int copynum = step->GetPreStepPoint()->GetTouchableHandle()->GetCopyNumber();
+              //fEventAction->WorkingBars(copynum);  
 }
 
 }
-
-
-
 
 
 //Para agregar información del numero de copia atravesada tuve que modificar  lo que esta con "//" y todo lo que tenia a "touchedVolume". 

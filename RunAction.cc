@@ -2,7 +2,7 @@
 
 #include "RunAction.hh"
 
-RunAction::RunAction()
+RunAction::RunAction(): photonHits(40, 0)
 {
  G4AnalysisManager *man = G4AnalysisManager::Instance();
 
@@ -64,6 +64,8 @@ void RunAction:: BeginOfRunAction(const G4Run* run)
 {
  G4AnalysisManager *man = G4AnalysisManager::Instance(); 
 
+ photonHits.assign(40, 0);  
+
 
  G4int runID = run->GetRunID();
 
@@ -72,7 +74,7 @@ void RunAction:: BeginOfRunAction(const G4Run* run)
 
  man->OpenFile("Output"+strRunID.str()+".root");
 
-
+ //photonHits = 0; 
 }
 
 
@@ -80,6 +82,10 @@ void RunAction::EndOfRunAction(const G4Run*)
 {
  G4AnalysisManager *man = G4AnalysisManager::Instance();
 
+ 
+  //G4cout << "NUMBER OF PHOTONS DETECTED: " << photonHits << G4endl; 
+
+  //man->FillNtupleDColumn(1,0,photonHits); //total
  
  man->Write();
  man->CloseFile();
