@@ -2,6 +2,8 @@
 
 #include "SteppingAction.hh"
 
+using namespace std;
+
 SteppingAction::SteppingAction( EventAction *eventaction)
 {
  fEventAction = eventaction;

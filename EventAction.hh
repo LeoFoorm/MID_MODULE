@@ -8,6 +8,7 @@
 #include "G4AnalysisManager.hh"
 #include "RunAction.hh"
 
+using namespace std;
 
 class EventAction : public G4UserEventAction
 {

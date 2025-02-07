@@ -1,6 +1,7 @@
 //   EVENT ACTION SOURCE
 
 #include "EventAction.hh" 
+using namespace std;
 
 
 EventAction::EventAction(RunAction*) : photonHits_event_A(20, 0), photonHits_event_B(20, 0) 
