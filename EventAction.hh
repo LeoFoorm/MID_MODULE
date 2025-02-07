@@ -136,6 +136,21 @@ void AddTraversedBar_B (G4int barB){
 std::vector<G4int> GetTraversedBars_B() const {return traversed_Bars_B;}
 
 //---------------------------------------------------------
+void Particle_Name_Pierced_Layer_A(G4String name_a){
+    particles_names_A.push_back(name_a);
+}
+
+vector<G4String> Get_particle_names_A() const {return particles_names_A;}
+
+
+
+void Particle_Name_Pierced_Layer_B(G4String name_b){
+    particles_names_B.push_back(name_b);
+}
+
+vector<G4String> Get_particle_names_B() const {return particles_names_B;}
+
+//---------------------------------------------------------
 
 
 private:
@@ -155,6 +170,9 @@ std::vector<G4int> fGenerated_photons_B;
 
 std::vector<G4int> traversed_Bars_A; 
 std::vector<G4int> traversed_Bars_B; 
+
+vector<G4String> particles_names_A;
+vector<G4String> particles_names_B;
 
 G4double TOTAL_Edep;
 G4double TOTAL_dEdx;

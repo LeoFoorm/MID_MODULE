@@ -48,7 +48,10 @@ RunAction::RunAction(): photonHits(40, 0)
   man->CreateNtupleDColumn("Total_Energy_Deposition");  //166
   man->CreateNtupleDColumn("Total_dEdx");  //167
   man->CreateNtupleIColumn("Total_Photons_Detected");  //168
-  man->CreateNtupleDColumn("Total_Photons_Generated");  //169 
+  man->CreateNtupleDColumn("Total_Photons_Generated");  //169
+
+  man->CreateNtupleSColumn("PARTICLE_NAME_ON_A"); //170
+  man->CreateNtupleSColumn("PARTICLE_NAME_ON_B"); //171
 
   man->FinishNtuple(1);
 

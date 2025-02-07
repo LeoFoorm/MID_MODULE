@@ -27,6 +27,9 @@ fGenerated_photons_B.resize(20, 0.0);
     TOTAL_Detected_photons = 0.0;
     TOTAL_Generated_photons = 0.0;
 
+    particles_names_A.clear();
+    particles_names_B.clear();
+
 }
 
 
@@ -65,6 +68,9 @@ void EventAction::BeginOfEventAction(const G4Event*)
     TOTAL_dEdx = 0.0;
     TOTAL_Detected_photons = 0.0;
     TOTAL_Generated_photons = 0.0;
+
+    particles_names_A.clear();
+    particles_names_B.clear();
 }
 
 
@@ -310,6 +316,31 @@ if (traversed_Bars_A.empty()) {
 
 
  //-------------------------------------------------------------------------------------------
+
+//G4cout << G4endl;
+//G4cout << "PARTICLES ON LAYER A: " <<  G4endl;
+
+if (particles_names_A.empty()) {
+    //G4cout << "**No particles pierced Layer A in this event." << G4endl;
+} else {
+    for (auto p_name : particles_names_A) {
+        //G4cout << p_name << ", ";
+        man->FillNtupleSColumn(1, 170, p_name);
+    }}
+
+
+//G4cout << G4endl;
+//G4cout << "PARTICLES ON LAYER B: " <<  G4endl;
+
+if (particles_names_B.empty()) {
+   // G4cout << "**No particles pierced Layer B in this event." << G4endl;
+} else {
+    for (auto p_name : particles_names_B) {
+       // G4cout << p_name << ", ";
+        man->FillNtupleSColumn(1, 171, p_name);
+    }}
+
+//-------------------------------------------------------------------------------------------
 
 
 man->AddNtupleRow(1);

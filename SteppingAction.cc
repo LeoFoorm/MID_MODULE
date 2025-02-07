@@ -35,7 +35,7 @@ G4TouchableHandle touchedbar = step->GetPreStepPoint()->GetTouchableHandle();
 G4StepPoint *PreStep = step->GetPreStepPoint();
   
  
-if(particle->GetParticleName()== "pi+"){
+if(particle->GetParticleName()== "mu+"){
    G4double dEdxStep_A = 0.0; 
    G4double dEdxStep_B = 0.0;
    G4double generated_photons_A = 0.0;
@@ -103,8 +103,36 @@ if(particle->GetParticleName()== "pi+"){
               //fEventAction->WorkingBars(copynum);  
 }
 
+
+if(particle->GetParticleName()!= "opticalphoton"){
+ if (std::find(scoringVolumesA.begin(), scoringVolumesA.end(), barvolume) != scoringVolumesA.end())
+        {
+
+         //G4int copyNumA = touchedbar->GetCopyNumber(); 
+         
+         G4double edep_others_A = step->GetTotalEnergyDeposit();
+         if (edep_others_A > 0.&& stepLength > 0.)
+         {
+            G4String p_name = step->GetTrack()->GetDefinition()->GetParticleName();
+           
+            fEventAction->Particle_Name_Pierced_Layer_A(p_name);    
+         }}
+      
+
+ if (std::find(scoringVolumesB.begin(), scoringVolumesB.end(), barvolume) != scoringVolumesB.end())
+        {
+
+         //G4int copyNumB = touchedbar->GetCopyNumber(); 
+                
+         G4double edep_others_B = step->GetTotalEnergyDeposit();
+         if (edep_others_B > 0.&& stepLength > 0.)
+         {
+            G4String p_name = step->GetTrack()->GetDefinition()->GetParticleName();
+           
+            fEventAction->Particle_Name_Pierced_Layer_B(p_name);  
+        
+         }}
+}
+        
 }
 
-
-//Para agregar información del numero de copia atravesada tuve que modificar  lo que esta con "//" y todo lo que tenia a "touchedVolume". 
-//En eventAction todo lo respectivo a estos cambios hechos de prisa los señalaré con //X

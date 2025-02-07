@@ -226,8 +226,8 @@ void DetectorConstruction::ConstructMIDModule()
   G4ThreeVector  positionSA = G4ThreeVector(0, 66.56*cm, 0);
 
   SolidSA = new G4Box("SolidSA", SA_X, SA_Y, SA_Z );
- LogicalSA = new G4LogicalVolume(SolidSA, steel, "LogicSA");
- PhysicalSA = new G4PVPlacement(0, positionSA, LogicalSA, "PhysicalSA", LogicWorld, false, 0, true);
+ //LogicalSA = new G4LogicalVolume(SolidSA, steel, "LogicSA");
+ //PhysicalSA = new G4PVPlacement(0, positionSA, LogicalSA, "PhysicalSA", LogicWorld, false, 0, true);
 
 
 
