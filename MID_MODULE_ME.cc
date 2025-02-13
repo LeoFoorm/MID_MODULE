@@ -30,11 +30,17 @@ int main(int argc,char** argv)
     seeds[1] = 0;
     CLHEP::HepRandom::setTheSeeds(seeds);
     
-    G4RunManager *runManager = new G4RunManager;
+    //#ifdef G4MULTITHREADED
+      //  G4MTRunManager *runManager = new G4MTRunManager();
+    //#else
+    
+        G4RunManager *runManager = new G4RunManager();
+    //#endif
     
     runManager->SetUserInitialization(new DetectorConstruction());
     runManager->SetUserInitialization(new PhysicsList());
     runManager->SetUserInitialization(new ActionInitialization());
+    
     runManager->Initialize();
     
     G4UIExecutive *ui = 0;
