@@ -7,6 +7,10 @@
 #include "G4Event.hh"
 #include "G4AnalysisManager.hh"
 #include "RunAction.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4ThreeVector.hh"
+#include <cmath>
+#include <vector>
 
 using namespace std;
 

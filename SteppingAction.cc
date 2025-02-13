@@ -37,7 +37,7 @@ G4TouchableHandle touchedbar = step->GetPreStepPoint()->GetTouchableHandle();
 G4StepPoint *PreStep = step->GetPreStepPoint();
   
  
-if(particle->GetParticleName()== "mu+"){
+if(particle->GetParticleName()== "mu+" ||  particle->GetParticleName() == "pi+" ){
    G4double dEdxStep_A = 0.0; 
    G4double dEdxStep_B = 0.0;
    G4double generated_photons_A = 0.0;
@@ -105,6 +105,8 @@ if(particle->GetParticleName()== "mu+"){
               //fEventAction->WorkingBars(copynum);  
 }
 
+// ---------------------------------------------------------------------------------
+        
 
 if(particle->GetParticleName()!= "opticalphoton"){
  if (std::find(scoringVolumesA.begin(), scoringVolumesA.end(), barvolume) != scoringVolumesA.end())
@@ -133,7 +135,8 @@ if(particle->GetParticleName()!= "opticalphoton"){
            
             fEventAction->Particle_Name_Pierced_Layer_B(p_name);  
         
-         }}
+         }
+         }
 }
         
 }
