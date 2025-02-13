@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include "G4RunManager.hh"
+#include "G4MTRunManager.hh"
 #include "G4UImanager.hh"
 #include "G4UIExecutive.hh"
 #include "G4VisManager.hh"
@@ -30,18 +31,18 @@ int main(int argc,char** argv)
     seeds[1] = 0;
     CLHEP::HepRandom::setTheSeeds(seeds);
     
-    //#ifdef G4MULTITHREADED
-      //  G4MTRunManager *runManager = new G4MTRunManager();
-    //#else
+    #ifdef G4MULTITHREADED
+        G4MTRunManager *runManager = new G4MTRunManager();
+    #else
     
         G4RunManager *runManager = new G4RunManager();
-    //#endif
+    #endif
     
     runManager->SetUserInitialization(new DetectorConstruction());
     runManager->SetUserInitialization(new PhysicsList());
     runManager->SetUserInitialization(new ActionInitialization());
     
-    runManager->Initialize();
+    //runManager->Initialize();
     
     G4UIExecutive *ui = 0;
     if(argc==1)
