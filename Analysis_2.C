@@ -23,11 +23,11 @@ void Analysis_2()
     //muones vs piones en caso con y sin absorber
  
     //abre los archivos
-    TFile *file = TFile::Open("Output0.root", "READ"); 
-    TFile *file2 = TFile::Open("Mu_No_mil.root", "READ"); 
+    TFile *file = TFile::Open(".root", "READ"); 
+    TFile *file2 = TFile::Open(".root", "READ"); 
 
-    TFile *file3 = TFile::Open("Pi_Si_mil.root", "READ"); 
-    TFile *file4 = TFile::Open("Pi_No_mil.root", "READ"); 
+    TFile *file3 = TFile::Open(".root", "READ"); 
+    TFile *file4 = TFile::Open(".root", "READ"); 
    
     
     
@@ -47,9 +47,7 @@ void Analysis_2()
     Double_t particleMomentum = 0.0; 
     int Hit_passing_through_both_bars = 0;
     Double_t angle = 0.0;
-
     int total_detected_gammas = 0.0 ;
-
     Double_t total_energy_deposition = 0.0;
 
 
@@ -58,7 +56,6 @@ void Analysis_2()
     tree->SetBranchAddress("HIT_particle_passed_both_layers", &Hit_passing_through_both_bars);
     tree->SetBranchAddress("angle",&angle);
     tree->SetBranchAddress("Total_Photons_Detected", &total_detected_gammas);
-
     tree->SetBranchAddress("Total_Energy_Deposition", & total_energy_deposition);
 
 
@@ -70,18 +67,22 @@ void Analysis_2()
     vector<int> anglesCounts(20,0);
 
     vector <int>GammaSum(20, 0);  
-    vector<double_t> PhotonAverage(20, 0.0);    
+    vector<double_t> PhotonAverage(20, 0.0); 
+    vector<double_t> photons_average_per_hit(20,0.0);   
 
 
     // Recorre los evento
     Long64_t nEntries = tree->GetEntries();
 
 
+    /* SOLO PARA ASEGURAR DE OBTENER LA INFORMCIÓN CORRECTA
     for (Long64_t i = 0; i < nEntries; ++i) {
     tree->GetEntry(i);
     cout << "Evento " << i << ": Total_Photons_Detected = " << total_detected_gammas << endl;
     }
     cout<< ""<<endl;
+    */
+
 
     for (Long64_t i = 0; i < nEntries; ++i) {
 
@@ -91,31 +92,39 @@ void Analysis_2()
         int momentumRange = static_cast<int>(particleMomentum / 0.5);
 
         if (momentumRange >= 0 && momentumRange < 20) {
+
             momentumCounts[momentumRange]++;
 
             GammaSum[momentumRange] += total_detected_gammas;
-
         }else {
             continue; 
         }
 
+        //hits por rango de momento
         if(momentumRange >= 0 && momentumRange <20 && Hit_passing_through_both_bars == 1){
             HitCounts[momentumRange]++;
         }
 
 
-        int AngleRange = static_cast<int>(angle/0.50625); 
+        //..................................................................................................
+        //Indentifica rangos de angulo
+        int AngleRange = static_cast<int>(angle/0.50625);
+
         if(AngleRange >=0 && AngleRange < 20){
+
             anglesCounts[AngleRange]++;
         }else {continue;}
 
+
+        //hits cpor rangos de angulo
         if(AngleRange >=0 && AngleRange < 20 && Hit_passing_through_both_bars == 1){
             HitCounts_angle[AngleRange]++;
         }
     }
 
     
-    // Imprime los resultados
+  //Eficiencia de Hits por p_T
+
     cout<< "\n MUONES CON ABSORBER \n" <<endl;
     cout << "Resultados: Hits por rango de momento y angulo. Cantidad de fotones detectados.\n";
 
@@ -126,21 +135,41 @@ void Analysis_2()
 
         cout << "Rango " << i + 1 << " (" << i * 0.5 << " GeV - " << (i + 1) * 0.5
              << " GeV):     " << HitCounts[i] << " hits,        " << momentumCounts[i] << "  momentos  en el rango. " 
-             << "       Eficiencia:     " << EFF << " %. " << endl;
-        
+             << "       Eficiencia:     " << EFF << " %. " << endl;   
+    }
+cout << "\n"<< endl;
+
+    //Para generar el grafico de eficiencia. 
+
+    vector<Double_t> xValues;
+    vector<Double_t> yValues;
+
+    for (int x = 0; x < 20; ++x){
+        Double_t mom = x * 0.5 + 0.25;
+        xValues.push_back(mom);
+    
+
+        int Hits =  HitCounts[x];
+        Double_t efficiency = (static_cast<Double_t>(Hits) / momentumCounts[x]) * 100;
+        yValues.push_back(efficiency);
     }
 
-cout << "\n"<< endl;
+
+    //Cantidad promedio de fotones detectados por hits. 
                             //antes era HitCounts.size()
        for (size_t i = 0; i < GammaSum.size(); ++i) {
         if(momentumCounts[i] > 0){
         PhotonAverage[i] = static_cast<double>(GammaSum[i]) / momentumCounts[i];
+
+        //photons_average_per_hit[i] = static_cast<double>(GammaSum[i]) / HitCounts[i];
       
         cout << "Rango " << i + 1  << "  "<< PhotonAverage[i] << " fotones promedio por rango "  << endl;
+        //cout << "RANGO (" << i + 1  << ")  "<< photons_average_per_hit[i] << " fotones promedio por HIT "  << endl; //<- 100% siempre porque solo considero fotones de hits.
         } 
     }
-
     cout << "\n"<< endl;
+
+
 
     vector<Double_t> x_angles;
     vector<Double_t> y_eff_angles;
@@ -159,19 +188,7 @@ cout << "\n"<< endl;
     }
 
 
-    //Para generar el grafico de eficiencia. 
-    vector<Double_t> xValues;
-    vector<Double_t> yValues;
 
-    for (int x = 0; x < 20; ++x){
-        Double_t mom = x * 0.5 + 0.25;
-        xValues.push_back(mom);
-    
-
-        int Hits =  HitCounts[x];
-        Double_t efficiency = (static_cast<Double_t>(Hits) / momentumCounts[x]) * 100;
-        yValues.push_back(efficiency);
-    }
 
      // -------- Grafico promedio gammas detectadas por SiPMs -----------------------
     
@@ -204,8 +221,7 @@ cout << "\n"<< endl;
 
 // -------- Grafico Edep y dE/dx totales -----------------------
     
-//create histograms
-   
+
     TH1D *Histo_edep_mu_si_abs = new TH1D("Histogram_edep_mu_with_absorber", "Energy Deposition [MeV] vs events ", 90, 0, 5);
     
     Histo_edep_mu_si_abs->SetTitle("TOTAL ENERGY DEPOSITION MUONS WITH ABSORBER");
@@ -218,6 +234,7 @@ cout << "\n"<< endl;
     //POR QUÉ NO FUNCIONA!?
     
     Long64_t nEntries_for_hist = tree->GetEntries();
+
     for (Long64_t i = 0; i < nEntries_for_hist; ++i) {
         tree->GetEntry(i);
         if (total_energy_deposition > 0){
@@ -231,7 +248,6 @@ cout << "\n"<< endl;
     Histo_edep_mu_si_abs->GetYaxis()->SetTitle("Total Energy deposition");
     
     
-   // Histo_edep_mu_si_abs->SetFillColorAlpha(kMagenta, 0.35);  // Fill color with transparency for mu-
     
     Histo_edep_mu_si_abs->Draw("HIST"); 
 
@@ -252,33 +268,47 @@ cout << "\n"<< endl;
     Double_t particleMomentum2 = 0.0; 
     int Hit_passing_through_both_bars2 = 0;
     Double_t angle2 = 0.0;
+     int total_detected_gammas_2 = 0.0 ;
+    Double_t total_energy_deposition_2 = 0.0;
 
 
-    // Vincula las ramas a las variables previamente definidas
+
     tree2->SetBranchAddress("Particle_Momentum_GeV", &particleMomentum2);  
     tree2->SetBranchAddress("HIT_particle_passed_both_layers", &Hit_passing_through_both_bars2);  
     tree2->SetBranchAddress("angle",&angle2);
 
-    // Vectores y estructuras para almacenar resultados
+    tree2->SetBranchAddress("Total_Photons_Detected", &total_detected_gammas_2);
+    tree2->SetBranchAddress("Total_Energy_Deposition", & total_energy_deposition_2);
+
+
+
     vector<int> momentumCounts2(20, 0); 
     vector<int> HitCounts2(20, 0);
 
     vector<int>HitCounts_angle2(20,0);
     vector<int> anglesCounts2(20,0);
 
+    vector <int>GammaSum_2(20, 0);
 
-    // Recorre los evento
+    vector<double_t> PhotonAverage_2(20, 0.0);    
+
+
+
     Long64_t nEntries2 = tree2->GetEntries();
 
     for (Long64_t j = 0; j < nEntries2; ++j) {
 
         tree2->GetEntry(j);
 
-        // Identifica el rango del momento
+
         int momentumRange2 = static_cast<int>(particleMomentum2 / 0.5);
         if (momentumRange2 >= 0 && momentumRange2 < 20) {
             momentumCounts2[momentumRange2]++;
+
+            GammaSum_2[momentumRange2] += total_detected_gammas_2;
+
         }else {continue; }
+
 
         if(momentumRange2 >= 0 && momentumRange2 <20 && Hit_passing_through_both_bars2 == 1){
             HitCounts2[momentumRange2]++;
@@ -290,17 +320,19 @@ cout << "\n"<< endl;
             anglesCounts2[AngleRange2]++;
         }else {continue;}
 
+
         if(AngleRange2 >=0 && AngleRange2 < 20 && Hit_passing_through_both_bars2 == 1){
             HitCounts_angle2[AngleRange2]++;
         }
     }
 
     
-    // Imprime los resultados
+ //-------- Imprime los resultados ------------------------
     cout<< "\n MUONES SIN ABSORBER\n" <<endl;
     cout << "\n Resultados (2): Hits por rango de momento\n";
 
     for (size_t j = 0; j < HitCounts2.size(); ++j) {
+        
         int HITS2 = HitCounts2[j];
         double_t EFF2 = ( static_cast<Double_t>(HITS2)  /  momentumCounts2[j] ) * 100;
 
@@ -308,9 +340,34 @@ cout << "\n"<< endl;
              << " GeV):     " << HitCounts2[j] << " hits,       " << momentumCounts2[j] << "  momentos  en el rango."
             << "       Eficiencia:      " << EFF2 << " %. " << endl;
     }
-
-
     cout << "\n";
+
+
+   vector<Double_t> xValues2;
+    vector<Double_t> yValues2;
+
+    for (int x = 0; x < 20; ++x){
+        Double_t mom = x * 0.5 + 0.25;
+        xValues2.push_back(mom);
+    
+
+        int Hits2 =  HitCounts2[x];
+        Double_t efficiency2 = (static_cast<Double_t>(Hits2) / momentumCounts2[x]) * 100;
+        yValues2.push_back(efficiency2);
+    }
+
+
+
+ for (size_t i = 0; i < GammaSum_2.size(); ++i) {
+        if(momentumCounts2[i] > 0){
+        PhotonAverage_2[i] = static_cast<double>(GammaSum_2[i]) / momentumCounts_2[i];
+      
+        cout << "Rango " << i + 1  << "  "<< PhotonAverage_2[i] << " fotones promedio por rango "  << endl;
+        } 
+    }
+    cout << "\n"<< endl;
+
+
 
     vector<Double_t> x_angles2;
     vector<Double_t> y_eff_angles2;
@@ -329,8 +386,6 @@ cout << "\n"<< endl;
              << " particulas con angulos dentro del rango. |  " << EFF_Angle2 << "%. Eiciencia." << endl;
     }
 
-
-    //Para generar el grafico de eficiencia. 
     vector<Double_t> xValues2;
     vector<Double_t> yValues2;
 
@@ -345,7 +400,7 @@ cout << "\n"<< endl;
     }
 
 
-    // -------- Grafico -----------------------
+    // -------- EFICIENCIA CON/SIN ABSORBER MUONES HIT VS p_T-----------------------
 
     TCanvas* canvas = new TCanvas("Efficiency", "Efficiency vs Transverse Momentum", 1600, 1200);
     TGraph* SiAbs = new TGraph(xValues.size(), &xValues[0], &yValues[0]);
@@ -373,7 +428,7 @@ cout << "\n"<< endl;
     canvas->SetGrid();
     canvas->Update();
 
-//...........................
+//.............  EFICIENCIA CON/SIN ABROSBER ANGULOS VS p_T............
 
     TCanvas* canva_ang_si_abs = new TCanvas("Efficiency with angles", "Efficiency vs incident angle", 1600, 1200);
     TGraph* SiAbs_ang = new TGraph(x_angles.size(), &x_angles[0], &y_eff_angles[0]);
@@ -402,7 +457,40 @@ cout << "\n"<< endl;
     canva_ang_si_abs->Update();
 
 
+//.........................................................................
 
+     // -------- PROMEDIO DE GAMMAS DETECTADAS  (por SiPMs)  CON/SIN ABSORBER POR p_T  -----------------------
+    
+    TCanvas* canva_test = new TCanvas("promedio_gammas_vs_Pt", "Mean value of detected gammas vs Transverse Momentum", 1600, 1200);
+    
+    TGraph* gammas_pt = new TGraph(xValues.size(), &xValues[0], &PhotonAverage[0]);
+    TGraph* gammas_mu_no = new TGraph(xValues2.size(), &xValues2[0], &PhotonAverage_2[0]);
+  
+    gammas_pt->SetTitle("Mean value of detected gammas vs Transverse Momentum Muones");
+    gammas_pt->SetMarkerStyle(20);
+    gammas_pt->SetMarkerColor(kAzure); 
+
+    gammas_pt->GetXaxis()->SetTitle("Transverse Momentum [GeV/c]");
+    gammas_pt->GetYaxis()->SetTitle("Mean gammas detected [gammas]");
+
+    gammas_pt->Draw("AP");
+    
+    gammas_mu_no->SetMarkerStyle(21);
+    gammas_mu_no->SetMarkerColor(kBlue);
+    
+    gammas_mu_no->Draw("P SAME");
+    
+  
+    TLegend* legend_gammas = new TLegend(0.7, 0.7, 0.9, 0.9);
+    legend_gammas->AddEntry(gammas_pt, "SI ABSORBER", "lp");
+    legend_gammas->AddEntry(gammas_mu_no, "NO ABSORBER", "lp");
+    legend_gammas->Draw();
+
+    canva_test->SetGrid();
+    canva_test->Update();
+    
+
+//.........................................................................
  //------ ANALYSIS  PIONES --------------
 
  //------- FILE 3 SI ABSROBER --------------------------------
