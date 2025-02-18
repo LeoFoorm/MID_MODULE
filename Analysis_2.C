@@ -20,14 +20,13 @@ using namespace std;
 
 void Analysis_2()
 {
-    //muones vs piones en caso con y sin absorber
  
     //abre los archivos
-    TFile *file = TFile::Open(".root", "READ"); 
-    TFile *file2 = TFile::Open(".root", "READ"); 
+    TFile *file = TFile::Open("mu_si_merge.root", "READ"); 
+    TFile *file2 = TFile::Open("mu_no_merge.root", "READ"); 
 
-    TFile *file3 = TFile::Open(".root", "READ"); 
-    TFile *file4 = TFile::Open(".root", "READ"); 
+    TFile *file3 = TFile::Open("pi_si_merge.root", "READ"); 
+    TFile *file4 = TFile::Open("pi_no_merge.root", "READ"); 
    
     
     
@@ -155,7 +154,8 @@ cout << "\n"<< endl;
     }
 
 
-    //Cantidad promedio de fotones detectados por hits. 
+        cout << "----------- AVERGAE DETECTED GAMMAS -----------"<<endl;
+        cout << "" << endl;
                             //antes era HitCounts.size()
        for (size_t i = 0; i < GammaSum.size(); ++i) {
         if(momentumCounts[i] > 0){
@@ -171,6 +171,8 @@ cout << "\n"<< endl;
 
 
 
+    cout << "----------- EFFICIENCY WITH ANGLES -----------"<<endl;
+    cout << "" << endl;
     vector<Double_t> x_angles;
     vector<Double_t> y_eff_angles;
     for (size_t i = 0; i < HitCounts_angle.size(); ++i){
@@ -189,7 +191,7 @@ cout << "\n"<< endl;
 
 
 
-
+    /*
      // -------- Grafico promedio gammas detectadas por SiPMs -----------------------
     
     TCanvas* canva_test = new TCanvas("promedio_gammas_vs_Pt", "Mean value of detected gammas vs Transverse Momentum", 1600, 1200);
@@ -203,12 +205,12 @@ cout << "\n"<< endl;
     gammas_pt->GetYaxis()->SetTitle("Mean gammas detected [gammas]");
 
     gammas_pt->Draw("AP");
-    /*
+   
     NoAbs->SetMarkerStyle(21);
     NoAbs->SetMarkerColor(kBlue);
     
     NoAbs->Draw("P SAME");
-    */
+    
   
     TLegend* legend_gammas = new TLegend(0.7, 0.7, 0.9, 0.9);
     legend_gammas->AddEntry(gammas_pt, "SI ABSORBER", "lp");
@@ -217,11 +219,10 @@ cout << "\n"<< endl;
 
     canva_test->SetGrid();
     canva_test->Update();
-    
-
+    */
 // -------- Grafico Edep y dE/dx totales -----------------------
     
-
+    /*
     TH1D *Histo_edep_mu_si_abs = new TH1D("Histogram_edep_mu_with_absorber", "Energy Deposition [MeV] vs events ", 90, 0, 5);
     
     Histo_edep_mu_si_abs->SetTitle("TOTAL ENERGY DEPOSITION MUONS WITH ABSORBER");
@@ -260,10 +261,10 @@ cout << "\n"<< endl;
 
     canvaOverlaping->SetGrid();
     canvaOverlaping->Update();
+    */
 
 
-
-//--------  FILE 2 NO ABSORBER ---------------------------
+//------------------------------ FILE 2 NO ABSORBER ---------------------------
 
     Double_t particleMomentum2 = 0.0; 
     int Hit_passing_through_both_bars2 = 0;
@@ -357,10 +358,11 @@ cout << "\n"<< endl;
     }
 
 
-
+   cout << "----------- AVERGAE DETECTED GAMMAS -----------"<<endl;
+        cout << "" << endl;
  for (size_t i = 0; i < GammaSum_2.size(); ++i) {
         if(momentumCounts2[i] > 0){
-        PhotonAverage_2[i] = static_cast<double>(GammaSum_2[i]) / momentumCounts_2[i];
+        PhotonAverage_2[i] = static_cast<double>(GammaSum_2[i]) / momentumCounts2[i];
       
         cout << "Rango " << i + 1  << "  "<< PhotonAverage_2[i] << " fotones promedio por rango "  << endl;
         } 
@@ -368,7 +370,8 @@ cout << "\n"<< endl;
     cout << "\n"<< endl;
 
 
-
+cout << "----------- EFFICIENCY WITH ANGLES -----------"<<endl;
+    cout << "" << endl;
     vector<Double_t> x_angles2;
     vector<Double_t> y_eff_angles2;
 
@@ -386,20 +389,7 @@ cout << "\n"<< endl;
              << " particulas con angulos dentro del rango. |  " << EFF_Angle2 << "%. Eiciencia." << endl;
     }
 
-    vector<Double_t> xValues2;
-    vector<Double_t> yValues2;
-
-    for (int x = 0; x < 20; ++x){
-        Double_t mom = x * 0.5 + 0.25;
-        xValues2.push_back(mom);
-    
-
-        int Hits2 =  HitCounts2[x];
-        Double_t efficiency2 = (static_cast<Double_t>(Hits2) / momentumCounts2[x]) * 100;
-        yValues2.push_back(efficiency2);
-    }
-
-
+   
     // -------- EFICIENCIA CON/SIN ABSORBER MUONES HIT VS p_T-----------------------
 
     TCanvas* canvas = new TCanvas("Efficiency", "Efficiency vs Transverse Momentum", 1600, 1200);
@@ -436,7 +426,7 @@ cout << "\n"<< endl;
     SiAbs_ang->SetTitle("Efficiency vs  incident angle");
     SiAbs_ang->SetMarkerStyle(20);
     SiAbs_ang->SetMarkerColor(kMagenta); 
-    SiAbs_ang->GetXaxis()->SetTitle("Angles ");
+    SiAbs_ang->GetXaxis()->SetTitle("Angles [° degrees]");
   
     SiAbs_ang->GetYaxis()->SetTitle("Efficiency [%]");
 
@@ -461,14 +451,14 @@ cout << "\n"<< endl;
 
      // -------- PROMEDIO DE GAMMAS DETECTADAS  (por SiPMs)  CON/SIN ABSORBER POR p_T  -----------------------
     
-    TCanvas* canva_test = new TCanvas("promedio_gammas_vs_Pt", "Mean value of detected gammas vs Transverse Momentum", 1600, 1200);
+    TCanvas* canva_test = new TCanvas("promedio_gammas_vs_Pt", "Mean value of detected gammas vs Transverse Momentum for muons ", 1600, 1200);
     
     TGraph* gammas_pt = new TGraph(xValues.size(), &xValues[0], &PhotonAverage[0]);
     TGraph* gammas_mu_no = new TGraph(xValues2.size(), &xValues2[0], &PhotonAverage_2[0]);
   
-    gammas_pt->SetTitle("Mean value of detected gammas vs Transverse Momentum Muones");
+    gammas_pt->SetTitle("Mean value of detected gammas vs Transverse Momentum Muons");
     gammas_pt->SetMarkerStyle(20);
-    gammas_pt->SetMarkerColor(kAzure); 
+    gammas_pt->SetMarkerColor(kRed); 
 
     gammas_pt->GetXaxis()->SetTitle("Transverse Momentum [GeV/c]");
     gammas_pt->GetYaxis()->SetTitle("Mean gammas detected [gammas]");
@@ -491,42 +481,59 @@ cout << "\n"<< endl;
     
 
 //.........................................................................
+ 
+
+
+
  //------ ANALYSIS  PIONES --------------
 
  //------- FILE 3 SI ABSROBER --------------------------------
 
 
-    // Variables para almacenar datos
     Double_t particleMomentum3 = 0.0; 
     int Hit_passing_through_both_bars3 = 0;
     Double_t angle3 = 0.0;
+     int total_detected_gammas3 = 0.0 ;
+    Double_t total_energy_deposition3 = 0.0;
+
     
 
-    // Vincula las ramas a las variables previamente definidas
     tree3->SetBranchAddress("Particle_Momentum_GeV", &particleMomentum3);  
     tree3->SetBranchAddress("HIT_particle_passed_both_layers", &Hit_passing_through_both_bars3);
     tree3->SetBranchAddress("angle" ,&angle3);
+    tree3->SetBranchAddress("Total_Photons_Detected", &total_detected_gammas3);
+    tree3->SetBranchAddress("Total_Energy_Deposition", & total_energy_deposition3);
+
         
 
-    // Vectores y estructuras para almacenar resultados
     vector<int> momentumCounts3(20, 0); 
     vector<int> HitCounts3(20, 0);
 
     vector<int>HitCounts_angle3(20,0);
     vector<int> anglesCounts3(20,0);
 
+     vector <int>GammaSum3(20, 0);  
 
-    // Recorre los evento
+    vector<double_t> PhotonAverage3(20, 0.0); 
+
+
+
     Long64_t nEntries3 = tree3->GetEntries();
 
     for (Long64_t i = 0; i < nEntries3; ++i) {
+       
         tree3->GetEntry(i);
 
-        // Identifica el rango del momento
         int momentumRange3 = static_cast<int>(particleMomentum3 / 0.5);
+        
         if (momentumRange3 >= 0 && momentumRange3 < 20) {
+            
             momentumCounts3[momentumRange3]++;
+
+            GammaSum3[momentumRange3] += total_detected_gammas3;
+       
         }else {continue;}
+
 
         if(momentumRange3 >= 0 && momentumRange3 <20 && Hit_passing_through_both_bars3 == 1){
             HitCounts3[momentumRange3]++;
@@ -534,17 +541,20 @@ cout << "\n"<< endl;
 
 
         int AngleRange3 = static_cast<int>(angle3/0.50625); 
+       
         if(AngleRange3 >=0 && AngleRange3 < 20){
+           
             anglesCounts3[AngleRange3]++;
         }else {continue;}
 
+        
         if(AngleRange3 >=0 && AngleRange3 < 20 && Hit_passing_through_both_bars3 == 1){
             HitCounts_angle3[AngleRange3]++;
         }
     }
 
     
-    // Imprime los resultados
+//----------------- Imprime los resultados -------------------------
        cout<< "\n PIONES CON ABSORBER\n" <<endl;
     cout << " \n Resultados (3): Hits por rango de momento\n";
     
@@ -560,10 +570,36 @@ cout << "\n"<< endl;
         //cout << "Rango " << i + 1 << " (" << i * 0.5 << " GeV - " << (i + 1) * 0.5
             // << " GeV): " << HitCounts3[i] << " hits, " << momentumCounts3[i] << "  momentos  en el rango.\n";
     }
-
-
     cout << "\n";
 
+    vector<Double_t> xValues3;
+    vector<Double_t> yValues3;
+
+    for (int x = 0; x < 20; ++x){
+        Double_t mom = x * 0.5 + 0.25;
+        xValues3.push_back(mom);
+    
+
+        int Hits3 =  HitCounts3[x];
+        Double_t efficiency3 = (static_cast<Double_t>(Hits3) / momentumCounts3[x]) * 100;
+        yValues3.push_back(efficiency3);
+    }
+
+
+     cout << "----------- AVERGAE DETECTED GAMMAS -----------"<<endl;
+        cout << "" << endl;
+    for (size_t i = 0; i < GammaSum3.size(); ++i) {
+        if(momentumCounts3[i] > 0){
+        PhotonAverage3[i] = static_cast<double>(GammaSum3[i]) / momentumCounts3[i];
+
+        cout << "Rango " << i + 1  << "  "<< PhotonAverage3[i] << " fotones promedio por rango "  << endl;
+      } 
+    }
+    cout << "\n"<< endl;
+
+
+    cout << "----------- EFFICIENCY WITH ANGLES -----------"<<endl;
+    cout << "" << endl;
     vector<Double_t> x_angles3;
     vector<Double_t> y_eff_angles3;
 
@@ -580,7 +616,7 @@ cout << "\n"<< endl;
              << HitCounts_angle3[i] << " hits con angulo dentro del rango,   " << anglesCounts3[i] 
              << " particulas con angulos dentro del rango. |  " << EFF_Angle3 << "%. Eiciencia." << endl;
     }
-
+            /*
         for (size_t i = 0; i < HitCounts_angle3.size(); ++i){
 
         Double_t ang3 = (i * 0.50625) + 0.253125;
@@ -592,23 +628,12 @@ cout << "\n"<< endl;
 
         cout <<  " (" << (i + 1) * 0.50625 << ",   " 
            << EFF_Angle3 << "%)" << endl;
-    }
-
-
-    //Para generar el grafico de eficiencia. 
-    vector<Double_t> xValues3;
-    vector<Double_t> yValues3;
-
-    for (int x = 0; x < 20; ++x){
-        Double_t mom = x * 0.5 + 0.25;
-        xValues3.push_back(mom);
+           }
+           */
     
 
-        int Hits3 =  HitCounts3[x];
-        Double_t efficiency3 = (static_cast<Double_t>(Hits3) / momentumCounts3[x]) * 100;
-        yValues3.push_back(efficiency3);
-    }
 
+    
 
 //--------  FILE 4 NO ABSORBER ---------------------------
 
@@ -617,33 +642,52 @@ cout << "\n"<< endl;
     int Hit_passing_through_both_bars4 = 0;
     Double_t angle4 = 0.0;
 
+    int total_detected_gammas4 = 0.0 ;
+    Double_t total_energy_deposition4 = 0.0;
 
 
-    // Vincula las ramas a las variables previamente definidas
+
     tree4->SetBranchAddress("Particle_Momentum_GeV", &particleMomentum4);  
     tree4->SetBranchAddress("HIT_particle_passed_both_layers", &Hit_passing_through_both_bars4); 
-    tree4->SetBranchAddress("angle", &angle4);   
+    tree4->SetBranchAddress("angle", &angle4);
+
+    tree4->SetBranchAddress("Total_Photons_Detected", &total_detected_gammas4);
+    tree4->SetBranchAddress("Total_Energy_Deposition", & total_energy_deposition4);
 
 
-    // Vectores y estructuras para almacenar resultados
+
+    
     vector<int> momentumCounts4(20, 0); 
     vector<int> HitCounts4(20, 0);
 
     vector<int>HitCounts_angle4(20,0);
     vector<int> anglesCounts4(20,0);
 
+    vector <int>GammaSum4(20, 0);
 
-    // Recorre los evento
+    vector<double_t> PhotonAverage4(20, 0.0);    
+
+
+
+
+   
     Long64_t nEntries4 = tree4->GetEntries();
 
     for (Long64_t j = 0; j < nEntries4; ++j) {
+
         tree4->GetEntry(j);
 
-        // Identifica el rango del momento
+      
         int momentumRange4 = static_cast<int>(particleMomentum4 / 0.5);
+        
         if (momentumRange4 >= 0 && momentumRange4 < 20) {
+            
             momentumCounts4[momentumRange4]++;
+
+            GammaSum4[momentumRange4] += total_detected_gammas4;
+
         }else { continue;}
+
 
         if(momentumRange4 >= 0 && momentumRange4 <20 && Hit_passing_through_both_bars4 == 1){
             HitCounts4[momentumRange4]++;
@@ -677,10 +721,37 @@ cout << "\n"<< endl;
         //cout << "Rango " << j + 1 << " (" <<j * 0.5 << " GeV - " << (j + 1) * 0.5
           //   << " GeV): " << HitCounts4[j] << " hits, " << momentumCounts4[j] << "  momentos  en el rango.\n";
     }
-
-
     cout << "\n";
 
+
+
+    vector<Double_t> xValues4;
+    vector<Double_t> yValues4;
+
+    for (int x = 0; x < 20; ++x){
+        Double_t mom = x * 0.5 + 0.25;
+        xValues4.push_back(mom);
+    
+
+        int Hits4 =  HitCounts4[x];
+        Double_t efficiency4 = (static_cast<Double_t>(Hits4) / momentumCounts4[x]) * 100;
+        yValues4.push_back(efficiency4);
+    }
+
+ cout << "----------- AVERGAE DETECTED GAMMAS -----------"<<endl;
+        cout << "" << endl;
+for (size_t i = 0; i < GammaSum4.size(); ++i) {
+        if(momentumCounts4[i] > 0){
+        PhotonAverage4[i] = static_cast<double>(GammaSum4[i]) / momentumCounts4[i];
+      
+        cout << "Rango " << i + 1  << "  "<< PhotonAverage4[i] << " fotones promedio por rango "  << endl;
+        } 
+    }
+    cout << "\n"<< endl;
+
+
+    cout << "----------- EFFICIENCY WITH ANGLES -----------"<<endl;
+    cout << "" << endl;
     vector<Double_t> x_angles4;
     vector<Double_t> y_eff_angles4;
 
@@ -698,6 +769,7 @@ cout << "\n"<< endl;
              << " particulas con angulos dentro del rango. |  " << EFF_Angle4 << "%. Eiciencia." << endl;
     }
 
+    /*
     for (size_t i = 0; i < HitCounts_angle4.size(); ++i){
 
         Double_t ang4 = (i * 0.50625) + 0.253125;
@@ -710,22 +782,9 @@ cout << "\n"<< endl;
         cout <<  " (" << (i + 1) * 0.50625 << ",   " 
            << EFF_Angle4 << "%)" << endl;
     }
+*/
 
-
-    //Para generar el grafico de eficiencia. 
-    vector<Double_t> xValues4;
-    vector<Double_t> yValues4;
-
-    for (int x = 0; x < 20; ++x){
-        Double_t mom = x * 0.5 + 0.25;
-        xValues4.push_back(mom);
     
-
-        int Hits4 =  HitCounts4[x];
-        Double_t efficiency4 = (static_cast<Double_t>(Hits4) / momentumCounts4[x]) * 100;
-        yValues4.push_back(efficiency4);
-    }
-
 
 //-------- Para que aparezcan todos los puntos --------------
     double_t xMin = min(*min_element(xValues3.begin(), xValues3.end()), *min_element(xValues4.begin(), xValues4.end()));
@@ -744,13 +803,13 @@ cout << "\n"<< endl;
 
     // -------- grafico --------------------
 
-    TCanvas* canvas2 = new TCanvas("Efficiency_2", "Efficiency vs Transverse Momentum", 1600, 1200);
+    TCanvas* canvas2 = new TCanvas("Efficiency_2", "Efficiency vs Transverse Momentum for pions", 1600, 1200);
     TGraph* NoAbs_pi = new TGraph(xValues4.size(), &xValues4[0], &yValues4[0]); 
     TGraph* SiAbs_pi = new TGraph(xValues3.size(), &xValues3[0], &yValues3[0]);
 
 
 
-    NoAbs_pi->SetTitle("Efficiency vs Transverse Momentum Piones TEST");
+    NoAbs_pi->SetTitle("Efficiency vs Transverse Momentum Pions");
     NoAbs_pi->SetMarkerStyle(20);
     NoAbs_pi->SetMarkerColor(kGreen); 
     NoAbs_pi->GetXaxis()->SetTitle("Transverse Momentum [GeV/c]");
@@ -772,7 +831,7 @@ cout << "\n"<< endl;
     canvas2->SetGrid();
     canvas2->Update();
 
-    //...........................
+//......................................................................
 
     // Calcular el rango de los ejes
 Double_t xMinang = std::min(*std::min_element(x_angles3.begin(), x_angles3.end()),
@@ -790,9 +849,10 @@ xMaxang += 0.1 * (xMaxang - xMinang);
 yMinang -= 0.1 * (yMaxang - yMinang);
 yMaxang += 0.1 * (yMaxang - yMinang);
 
+//......................................................................
 
 
-    TCanvas* canva_ang_si_abs_pi = new TCanvas("Efficiency with angles 2", "Efficiency vs incident angle", 1600, 1200);
+    TCanvas* canva_ang_si_abs_pi = new TCanvas("Efficiency with angles 2", "Efficiency vs incident angle for Pions ", 1600, 1200);
     TGraph* SiAbs_ang_pi = new TGraph(x_angles3.size(), &x_angles3[0], &y_eff_angles3[0]);
     TGraph* NoAbs_ang_pi = new TGraph(x_angles4.size(), &x_angles4[0], &y_eff_angles4[0]);
 
@@ -801,10 +861,10 @@ yMaxang += 0.1 * (yMaxang - yMinang);
     NoAbs_ang_pi->SetMinimum(yMinang);
     NoAbs_ang_pi->SetMaximum(yMaxang);
 
-    NoAbs_ang_pi->SetTitle("Efficiency vs  incident angle");
+    NoAbs_ang_pi->SetTitle("Efficiency vs  incident angle for Pions");
     NoAbs_ang_pi->SetMarkerStyle(20);
     NoAbs_ang_pi->SetMarkerColor(kViolet); 
-    NoAbs_ang_pi->GetXaxis()->SetTitle("Angles ");
+    NoAbs_ang_pi->GetXaxis()->SetTitle("Angles [° (degrees)]");
     NoAbs_ang_pi->GetYaxis()->SetTitle("Efficiency [%]");
     NoAbs_ang_pi->Draw("AP");
 
@@ -822,63 +882,131 @@ yMaxang += 0.1 * (yMaxang - yMinang);
     canva_ang_si_abs_pi->Update();
 
 
-//------------------------------------------------------------------
-//                 HISTOGRAMS OF DEPOSITED ENERGY
-/*
-//create histograms
-    TH1D *Histo_mu_siabs = new TH1D("Histogram total energy for muons with abosrber", "Energy Deposition [MeV] vs events ",300 , 0, 45);
-    Histo_mu_n->SetLineColor(kMagenta);
-    Histo_mu_n->SetFillColor(kMagenta); 
-    Histo_mu_n->SetFillStyle(3002); 
 
-    TH1D *Histo_mu_noabs = new TH1D("Histogram total energy for muons without abosrber", "Energy Deposition [MeV] vs events from mu+", 300, 0, 45);
-    Histo_mu_p->SetLineColor(kCyan);
-    Histo_mu_p->SetFillColor(kCyan);
-    Histo_mu_p->SetFillStyle(3003); 
+//.........................................................................
 
-    TH1D *Histo_pion-siabs = new TH1D("Histogram total energy for pions with abosrber", "Energy Deposition [MeV] vs events from pion", 300, 0, 45);
-    Histo_pion->SetLineColor(kYellow);
-    Histo_pion->SetFillColor(kYellow);
-    Histo_pion->SetFillStyle(3004); 
-
-    TH1D *Histo_pion-siabs = new TH1D("Histogram total energy for pions witouth abosrber", "Energy Deposition [MeV] vs events from pion", 300, 0, 45);
-    Histo_pion->SetLineColor(kSpring);
-    Histo_pion->SetFillColor(kSpring);
-    Histo_pion->SetFillStyle(3005); 
-
-    //Filling the histogram 
-    Emu_n->Draw("Energy_Deposition>>Histo_mu_n");
-    Emu_p->Draw("Energy_Deposition>>Histo_mu_p");
-    Epion->Draw("Energy_Deposition>>Histo_pion");
-
-    Histo_mu_n->SetFillColorAlpha(kMagenta, 0.35);  // Fill color with transparency for mu-
-    Histo_mu_p->SetFillColorAlpha(kCyan, 0.35);   // Fill color with transparency for mu+
-    Histo_pion->SetFillColorAlpha(kYellow, 0.35); // Fill color with transparency for pion
-
-
-    //Draw the histograms
-    TCanvas *canvaOverlaping = new TCanvas("canvaOverlaping","Overlaping of the histograms");
-
-    //set colors for every histo
-    //Histo_mu_n->SetLineColor(kBlue); 
-    //Histo_mu_p->SetLineColor(kRed); 
-    //Histo_pion->SetLineColor(kGreen);
-
-    //Draw each histogram
-    Histo_mu_n->Draw("HIST"); 
-    Histo_mu_p->Draw("HIST SAME"); 
-    Histo_pion->Draw("HIST SAME");
-
-    TLegend *legend = new TLegend(0.7, 0.7, 0.9, 0.9);
-    legend->AddEntry(Histo_mu_n, "Output_muon_Negative", "f");
-    legend->AddEntry(Histo_mu_p, "Output_muon_Positive", "f");
-    legend->AddEntry(Histo_pion, "Output_Pion", "f");
-    legend->Draw();
-
-    //update the canvas to show the plots
-    canvaOverlaping->Update();
-    */
+// -------- PROMEDIO DE GAMMAS DETECTADAS  (por SiPMs)  CON/SIN ABSORBER POR p_T  -----------------------
     
+    TCanvas* canva_test_pions = new TCanvas("promedio_gammas_vs_Pt_for_pions", "(PIONS) Mean value of detected gammas vs Transverse Momentum", 1600, 1200);
+    
+    TGraph* gammas_pi_si = new TGraph(xValues3.size(), &xValues3[0], &PhotonAverage3[0]);
+    TGraph* gammas_pi_no = new TGraph(xValues4.size(), &xValues4[0], &PhotonAverage4[0]);
+  
+    gammas_pi_no->SetTitle("Mean value of detected gammas vs Transverse Momentum Pions");
+    gammas_pi_no->SetMarkerStyle(20);
+    gammas_pi_no->SetMarkerColor(kAzure); 
+
+    gammas_pi_no->GetXaxis()->SetTitle("Transverse Momentum [GeV/c]");
+    gammas_pi_no->GetYaxis()->SetTitle("Mean gammas detected [gammas]");
+
+    gammas_pi_no->Draw("AP");
+    
+    gammas_pi_si->SetMarkerStyle(21);
+    gammas_mu_no->SetMarkerColor(kBlue);
+    
+    gammas_pi_si->Draw("P SAME");
+    
+  
+    TLegend* legend_gammas_pions = new TLegend(0.7, 0.7, 0.9, 0.9);
+    legend_gammas_pions->AddEntry(gammas_pi_no, "NO ABSORBER", "lp");
+    legend_gammas_pions->AddEntry(gammas_pi_si, "SI ABSORBER", "lp");
+    legend_gammas_pions->Draw();
+
+    canva_test_pions->SetGrid();
+    canva_test_pions->Update();
+
+
+//------------------------------------------------------------------
+
+
+     TH1D *Histo_edep_mu_si_abs = new TH1D("Histogram_edep_mu_with_absorber", "Energy Deposition [MeV] vs events (MU/YES ABS)", 40, 0, 9);
+    
+    Histo_edep_mu_si_abs->SetTitle("TOTAL ENERGY DEPOSITION MUONS AND PIONS WITH AND WITHOUT ABSORBER");
+    Histo_edep_mu_si_abs->SetLineColor(kMagenta); // Line color for histogram
+    Histo_edep_mu_si_abs->SetFillColor(kMagenta); // Fill color for bars
+    Histo_edep_mu_si_abs->SetFillStyle(3002);
+    
+
+    
+     TH1D *Histo_mu_no_abs = new TH1D("Histo_mu_without_absorber", "Energy Deposition [MeV] vs events   (MU/NO ABS)", 65, 0, 6);
+    Histo_mu_no_abs->SetLineColor(kCyan);
+    Histo_mu_no_abs->SetFillColor(kCyan);
+    Histo_mu_no_abs->SetFillStyle(3003); // Set fill style
+    
+    
+
+     TH1D *Histo_pi_si_abs = new TH1D("Histo_pi_with_absorber", "Energy Deposition [MeV] vs events   (PI/YES ABS)", 30, 0, 13);
+    Histo_pi_si_abs->SetLineColor(kYellow);
+    Histo_pi_si_abs->SetFillColor(kYellow);
+    Histo_pi_si_abs->SetFillStyle(3004); // Set fill style
+    
+
+
+    TH1D *Histo_pi_no_abs = new TH1D("Histo_pi_without_absorber", "Energy Deposition [MeV] vs events  (PI/NO ABS)", 95, 0, 6);
+    Histo_pi_no_abs->SetLineColor(kSpring);
+    Histo_pi_no_abs->SetFillColor(kSpring);
+    Histo_pi_no_abs->SetFillStyle(3005); // Set fill style
+    
+
+
+     Long64_t nEntries_for_hist = tree->GetEntries();
+
+    for (Long64_t i = 0; i < nEntries_for_hist; ++i) {
+        tree->GetEntry(i);
+        //if (total_energy_deposition > 0){
+        Histo_edep_mu_si_abs->Fill(total_energy_deposition); 
+        //} 
+    }
+
+
+    Long64_t nEntries_for_hist2 = tree2->GetEntries();
+    for (Long64_t i = 0; i < nEntries_for_hist2; ++i) {
+        tree2->GetEntry(i);
+       // if (total_energy_deposition_2 > 0){
+        Histo_mu_no_abs->Fill(total_energy_deposition_2); 
+        //} 
+    }
+
+    Long64_t nEntries_for_hist3 = tree3->GetEntries();
+    for (Long64_t i = 0; i < nEntries_for_hist3; ++i) {
+        tree3->GetEntry(i);
+      
+        Histo_pi_si_abs->Fill(total_energy_deposition3); 
+    }
+
+    Long64_t nEntries_for_hist4 = tree4->GetEntries();
+    for (Long64_t i = 0; i < nEntries_for_hist4; ++i) {
+        tree4->GetEntry(i);
+      
+        Histo_pi_no_abs->Fill(total_energy_deposition4); 
+    }
+
+
+
+    TCanvas *canvaOverlaping = new TCanvas("canvaOverlaping","Overlaping of the histograms");
+    
+    Histo_edep_mu_si_abs->GetXaxis()->SetTitle("Entries");
+    Histo_edep_mu_si_abs->GetYaxis()->SetTitle("Total Energy deposition (MeV)");
+    
+    
+    
+    Histo_edep_mu_si_abs->Draw("HIST");
+    Histo_mu_no_abs->Draw("HIST SAME");
+    Histo_pi_si_abs->Draw("HIST SAME");
+    Histo_pi_no_abs->Draw("HIST SAME"); 
+
+    
+   
+    TLegend *legend_histo = new TLegend(0.7, 0.7, 0.9, 0.9);
+    legend_histo->AddEntry( Histo_edep_mu_si_abs, "EDEP_Muons_With_Absorber", "f");
+    legend_histo->AddEntry( Histo_mu_no_abs, "EDEP_Muons_Without_Absorber", "f");
+    legend_histo->AddEntry( Histo_pi_si_abs, "EDEP_Pions_With_Absorber", "f");
+    legend_histo->AddEntry( Histo_pi_no_abs, "EDEP_Pions_Without_Absorber", "f");
+    legend_histo->Draw();
+
+
+    canvaOverlaping->SetGrid();
+    canvaOverlaping->Update();
 
 
 }
