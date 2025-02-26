@@ -6,8 +6,8 @@ using namespace std;
 
 EventAction::EventAction(RunAction*) : photonHits_event_A(20, 0), photonHits_event_B(20, 0) 
 {
-fEdepA.resize(20, 0.0); // Initialize with 20 bars, all values set to 0
-fEdepB.resize(20, 0.0); // Initialize with 20 bars, all values set to 0
+fEdepA.resize(20, 0.0); 
+fEdepB.resize(20, 0.0); 
 
 fTotaldEdx_A.resize(20, 0.0);
 fTotaldEdx_B.resize(20, 0.0);
@@ -27,6 +27,8 @@ fGenerated_photons_B.resize(20, 0.0);
     TOTAL_dEdx = 0.0;
     TOTAL_Detected_photons = 0.0;
     TOTAL_Generated_photons = 0.0;
+    total_edep_A = 0.0;
+    total_edep_B = 0.0;
 
     particles_names_A.clear();
     particles_names_B.clear();
@@ -69,6 +71,8 @@ void EventAction::BeginOfEventAction(const G4Event*)
     TOTAL_dEdx = 0.0;
     TOTAL_Detected_photons = 0.0;
     TOTAL_Generated_photons = 0.0;
+    total_edep_A = 0.0;
+    total_edep_B = 0.0;
 
     particles_names_A.clear();
     particles_names_B.clear();
@@ -114,6 +118,20 @@ for (size_t i = 0; i < fEdepA.size(); ++i) {
     G4cout << "TOTAL EDEP:  " << TOTAL_Edep << G4endl;
 
     man->FillNtupleDColumn(1, 166, TOTAL_Edep);
+
+
+//---------------------------------------------------
+    for(size_t i = 0; i < fEdepA.size(); ++i){
+        total_edep_A += fEdepA[i];
+    }
+    man->FillNtupleDColumn(1, 172, total_edep_A);
+
+    for(size_t i = 0; i < fEdepB.size(); ++i){
+        total_edep_B += fEdepB[i];
+    }
+    man->FillNtupleDColumn(1, 173, total_edep_B);
+//---------------------------------------------------
+
   
 //------------------------------------------------------------------------------------------
 G4cout << "" << G4endl;

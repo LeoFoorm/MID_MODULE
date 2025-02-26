@@ -184,6 +184,9 @@ G4double TOTAL_dEdx;
 
 G4int TOTAL_Detected_photons;
 G4double TOTAL_Generated_photons;
+
+G4double total_edep_A;
+G4double total_edep_B;
  
 
  G4int muonCount;
