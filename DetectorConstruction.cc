@@ -8,6 +8,13 @@
 #include <iostream>
 #include <tuple>
 
+#include "FieldSetUp.hh"
+
+#include "G4AutoDelete.hh"
+
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+
 
 DetectorConstruction::DetectorConstruction()
 {
@@ -17,9 +24,9 @@ DetectorConstruction::DetectorConstruction()
   
   DefineMaterials();
 
-  env_sizeX = 5*m;
-  env_sizeY = 5*m;
-  env_sizeZ = 5*m;
+  env_sizeX = 1.5*m;
+  env_sizeY = 3.5*m;
+  env_sizeZ = 1.5*m;
 
   distance_modules = 20*cm + 1.04*cm;
 
@@ -226,20 +233,20 @@ void DetectorConstruction::ConstructMIDModule()
   G4ThreeVector  positionSA = G4ThreeVector(0, 66.56*cm, 0);
 
   SolidSA = new G4Box("SolidSA", SA_X, SA_Y, SA_Z );
- //LogicalSA = new G4LogicalVolume(SolidSA, steel, "LogicSA");
- //PhysicalSA = new G4PVPlacement(0, positionSA, LogicalSA, "PhysicalSA", LogicWorld, false, 0, true);
+ LogicalSA = new G4LogicalVolume(SolidSA, steel, "LogicSA");
+ PhysicalSA = new G4PVPlacement(0, positionSA, LogicalSA, "PhysicalSA", LogicWorld, false, 0, true);
 
 
 
 //              CUBE TO B FIELD
-  G4double BcubeX = 4.9 * m;
-  G4double BcubeY = 1.9921 * m;
-  G4double BcubeZ = 4.9 * m;
+  G4double BcubeX = 1.4 * m;
+  G4double BcubeY = 1 * m;
+  G4double BcubeZ = 1.4 * m;
 
-  G4ThreeVector positioncube = G4ThreeVector(0, 3.0077 * m, 0);
+  G4ThreeVector positioncube = G4ThreeVector(0, 2.0156 * m, 0);
   SolidCube = new G4Box("SolidCube", BcubeX, BcubeY, BcubeZ);
   LogicCube = new G4LogicalVolume(SolidCube, worldMaterial, "LogicCube");
- PhysicalCube = new G4PVPlacement(0, positioncube, LogicCube, "PhysicalCube", LogicWorld, false, 0, true);
+ PhysicalCube = new G4PVPlacement(0, positioncube, LogicCube, "PhysicalCube_forB", LogicWorld, false, 100, true);
 
 }
 
@@ -277,7 +284,49 @@ void DetectorConstruction::ConstructSDandField()
         logicSiPM_aasignment_b->SetSensitiveDetector(sensDet);
     }
   
+  // Construct the field creator - this will register the field it creates
+  if (!fEmFieldSetup.Get()) {
+    auto  fieldSetup
+       = new F01FieldSetup(G4ThreeVector( 0.0, 0.0, 0.5*tesla ),
+                           fUseFSALstepper );
+    G4AutoDelete::Register(fieldSetup); // Kernel will delete the F01FieldSetup
+    fEmFieldSetup.Put(fieldSetup);
 
+    // Get components from field setup
+    G4MagneticField* magField = fieldSetup->GetMagneticField();
+    G4FieldManager* fieldMgr = fieldSetup->GetLocalFieldManager();
+    G4ChordFinder* chordFinder = fieldSetup->fChordFinder;
+    
+    // Configure field manager
+    fieldMgr->SetDetectorField(magField);
+    fieldMgr->SetChordFinder(chordFinder);
+    
+    // IMPORTANT: Assign only to LogicCube
+    LogicCube->SetFieldManager(fieldMgr, true); // true = override existing
+    
+    // Explicitly remove field from world
+    LogicWorld->SetFieldManager(nullptr, false);
+    
+    G4cout << "Created magnetic field confined to LogicCube volume" << G4endl;
+
+G4UniformMagField* uniformField = dynamic_cast<G4UniformMagField*>(magField);
+    if(uniformField) {
+        G4cout << "  Field value: " << uniformField->GetConstantFieldValue()/tesla 
+               << " Tesla" << G4endl;
+    }
+    else {
+        G4cout << "  Field is not uniform - cannot get constant value" << G4endl;
+    }
+  }
+
+
+  // After field assignment:
+G4cout << "Field manager assignments:" << G4endl;
+G4cout << "  LogicCube has field: " 
+       << (LogicCube->GetFieldManager() != nullptr) << G4endl;
+G4cout << "  LogicWorld has field: "
+       << (LogicWorld->GetFieldManager() != nullptr) << G4endl;
+  /*
   G4MagneticField *magField;
   G4ThreeVector BField = G4ThreeVector(0., 0., 5.0 *kilogauss);
   magField = new G4UniformMagField(BField);
@@ -286,6 +335,6 @@ void DetectorConstruction::ConstructSDandField()
   FieldMngr->SetDetectorField(magField);
   FieldMngr->CreateChordFinder(magField);
   LogicCube->SetFieldManager(FieldMngr,true); 
-  
+  */
 }
 

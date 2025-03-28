@@ -22,15 +22,15 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
- G4double minMomentum = 0;                                                  
- G4double maxMomentum = 10; 
+ G4double minMomentum = 0.000000001;                                                  
+ G4double maxMomentum = 2.5; 
  G4double randomNumber = G4UniformRand(); //random number between 0 and 1
  G4double momentumParticle = minMomentum + ( maxMomentum - minMomentum )*randomNumber;
  G4double momentum_onMeV = momentumParticle*1000;
 
 
    
-    G4ThreeVector position(0, 2.8*m, 0); 
+    G4ThreeVector position(0, 3.0156*m, 0); 
    
 
     G4double thetaMin = 0. * deg;

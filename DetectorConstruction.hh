@@ -23,9 +23,14 @@
 #include "G4TransportationManager.hh"
 #include "G4MagneticField.hh"
 
+#include "G4Cache.hh"
+
 
 class G4VPhysicalVolume;
 class G4LogicalVolume;
+
+class G4UniformMagField;
+class F01FieldSetup;
 
 
 
@@ -64,6 +69,9 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     G4bool MID_Module; 
     G4double distance_modules; 
     
+
+     void    SetUseFSALstepper( G4bool val ) { fUseFSALstepper = val; }
+     G4bool  AreUsingFSALstepper() { return fUseFSALstepper; }
   
   private: 
 
@@ -90,6 +98,11 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     G4Material *plastic, *worldMaterial, *steel, *mylarMaterial;
    
     G4OpticalSurface *mirrorsurface; 
+
+
+    G4Cache<F01FieldSetup*>    fEmFieldSetup;
+     G4bool             fUseFSALstepper= false;
+
   
 };
 
