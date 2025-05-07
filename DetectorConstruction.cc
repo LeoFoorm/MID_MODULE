@@ -15,6 +15,8 @@
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 
+using namespace std;
+
 
 DetectorConstruction::DetectorConstruction()
 {
@@ -287,8 +289,7 @@ void DetectorConstruction::ConstructSDandField()
   // Construct the field creator - this will register the field it creates
   if (!fEmFieldSetup.Get()) {
     auto  fieldSetup
-       = new F01FieldSetup(G4ThreeVector( 0.0, 0.0, 0.5*tesla ),
-                           fUseFSALstepper );
+       = new F01FieldSetup(G4ThreeVector( 0.0, 0.0, 0.5*tesla ));
     G4AutoDelete::Register(fieldSetup); // Kernel will delete the F01FieldSetup
     fEmFieldSetup.Put(fieldSetup);
 
@@ -308,8 +309,8 @@ void DetectorConstruction::ConstructSDandField()
     LogicWorld->SetFieldManager(nullptr, false);
     
     G4cout << "Created magnetic field confined to LogicCube volume" << G4endl;
-
-G4UniformMagField* uniformField = dynamic_cast<G4UniformMagField*>(magField);
+  }
+/*G4UniformMagField* uniformField = dynamic_cast<G4UniformMagField*>(magField);
     if(uniformField) {
         G4cout << "  Field value: " << uniformField->GetConstantFieldValue()/tesla 
                << " Tesla" << G4endl;
@@ -317,7 +318,7 @@ G4UniformMagField* uniformField = dynamic_cast<G4UniformMagField*>(magField);
     else {
         G4cout << "  Field is not uniform - cannot get constant value" << G4endl;
     }
-  }
+  }*/
 
 
   // After field assignment:
