@@ -1,6 +1,7 @@
 //      PRIMARY GENERATOR ACTION SOURCE FILE
 
 #include "PrimaryGeneratorAction.hh"
+using namespace std;
 
 PrimaryGeneratorAction::PrimaryGeneratorAction()  
 {
@@ -46,6 +47,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     G4double angle = theta*(180.0/(CLHEP::pi));
     //G4double angle = (std::acos(-1.0*yDir))*(180.0/2.0*CLHEP::pi);
 
+   G4double p_t = momentumParticle*cos(theta);
 
     G4ThreeVector momentumDirection(xDir,yDir,zDir);  
     fParticleGun->SetParticleMomentumDirection(momentumDirection);
@@ -63,6 +65,7 @@ G4AnalysisManager *man = G4AnalysisManager::Instance();
  man->FillNtupleDColumn(1, 160, momentum_onMeV); 
  man->FillNtupleDColumn(1, 161, momentumParticle);
  man->FillNtupleDColumn(1,162,angle);
+ man->FillNtupleDColumn(1,174,p_t);
  
 
 }
