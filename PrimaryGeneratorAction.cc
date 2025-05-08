@@ -35,7 +35,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
    
 
     G4double thetaMin = 0. * deg;
-    G4double thetaMax = 10.125 * deg;
+    G4double thetaMax = 10.125 * deg; //10.125 * deg; to cover a circle inside the area
     G4double phiMin = 0. * deg;
     G4double phiMax = 360. * deg;
     G4double theta = thetaMin + (thetaMax - thetaMin) * G4UniformRand();
@@ -58,14 +58,16 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
 G4cout << "" << G4endl;                                                            
 G4cout << "------------------------------------------------------------" << G4endl;
- G4cout << "MOMENTUM FOR THIS EVENT: " << momentumParticle << " GeV/c \n" << G4endl;                                                            
-G4cout << "PARTICLE ANGLE : " <<angle << "° \n"<<  G4endl;   
+G4cout << "MOMENTUM FOR THIS EVENT: " << momentumParticle << " GeV/c \n" << G4endl;  
+G4cout << "TRANSVERSE MOMENTUM : " <<p_t << " GeV/c \n"<<  G4endl;                                                           
+G4cout << "PARTICLE ANGLE : " <<angle << "° \n"<<  G4endl;  // eta ?  
+
 
 G4AnalysisManager *man = G4AnalysisManager::Instance(); 
  man->FillNtupleDColumn(1, 160, momentum_onMeV); 
  man->FillNtupleDColumn(1, 161, momentumParticle);
- man->FillNtupleDColumn(1,162,angle);
- man->FillNtupleDColumn(1,174,p_t);
+ man->FillNtupleDColumn(1, 162, angle);
+ man->FillNtupleDColumn(1, 174, p_t);
  
 
 }

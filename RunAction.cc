@@ -56,6 +56,8 @@ RunAction::RunAction(): photonHits(40, 0)
   man->CreateNtupleDColumn("total_edep_on_A"); //172
   man->CreateNtupleDColumn("total_edep_on_B"); //173
 
+  man->CreateNtupleDColumn("P_t"); //174
+
   man->FinishNtuple(1);
 
 
