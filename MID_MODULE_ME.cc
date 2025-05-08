@@ -31,12 +31,12 @@ int main(int argc,char** argv)
     seeds[1] = 0;
     CLHEP::HepRandom::setTheSeeds(seeds);
     
-    //#ifdef G4MULTITHREADED
-      //  G4MTRunManager *runManager = new G4MTRunManager();
-    //#else
+    #ifdef G4MULTITHREADED
+        G4MTRunManager *runManager = new G4MTRunManager();
+    #else
     
         G4RunManager *runManager = new G4RunManager();
-    //#endif
+    #endif
     
     runManager->SetUserInitialization(new DetectorConstruction());
     runManager->SetUserInitialization(new PhysicsList());
@@ -54,9 +54,9 @@ int main(int argc,char** argv)
 
     G4UImanager *UImanager = G4UImanager::GetUIpointer();
 
-   UImanager->ApplyCommand("/run/verbose 2");
-    UImanager->ApplyCommand("/control/verbose 2");
-    UImanager->ApplyCommand("/process/had/verbose 0");
+    UImanager->ApplyCommand("/run/verbose 2");
+    //UImanager->ApplyCommand("/control/verbose 2");
+    //UImanager->ApplyCommand("/process/had/verbose 0");
 
     if(ui)
     {
