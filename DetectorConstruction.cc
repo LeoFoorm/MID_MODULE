@@ -236,7 +236,7 @@ void DetectorConstruction::ConstructMIDModule()
 
   SolidSA = new G4Box("SolidSA", SA_X, SA_Y, SA_Z );
  LogicalSA = new G4LogicalVolume(SolidSA, steel, "LogicSA");
- PhysicalSA = new G4PVPlacement(0, positionSA, LogicalSA, "PhysicalSA", LogicWorld, false, 0, true);
+ //PhysicalSA = new G4PVPlacement(0, positionSA, LogicalSA, "PhysicalSA", LogicWorld, false, 0, true);
 
 
 
@@ -310,15 +310,6 @@ void DetectorConstruction::ConstructSDandField()
     
     G4cout << "Created magnetic field confined to LogicCube volume" << G4endl;
   }
-/*G4UniformMagField* uniformField = dynamic_cast<G4UniformMagField*>(magField);
-    if(uniformField) {
-        G4cout << "  Field value: " << uniformField->GetConstantFieldValue()/tesla 
-               << " Tesla" << G4endl;
-    }
-    else {
-        G4cout << "  Field is not uniform - cannot get constant value" << G4endl;
-    }
-  }*/
 
 
   // After field assignment:
@@ -327,6 +318,8 @@ G4cout << "  LogicCube has field: "
        << (LogicCube->GetFieldManager() != nullptr) << G4endl;
 G4cout << "  LogicWorld has field: "
        << (LogicWorld->GetFieldManager() != nullptr) << G4endl;
+
+ 
   /*
   G4MagneticField *magField;
   G4ThreeVector BField = G4ThreeVector(0., 0., 5.0 *kilogauss);

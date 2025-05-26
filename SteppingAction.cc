@@ -52,7 +52,7 @@ if(particle->GetParticleName()== "mu+" ||  particle->GetParticleName() == "pi+" 
          G4double edep_A = step->GetTotalEnergyDeposit();
          if (edep_A > 0.&& stepLength > 0.)
          {
-            G4double dEdxStep_A = edep_A / stepLength ;
+            dEdxStep_A = edep_A / stepLength ;
 
             G4Material *plastic_scin = step->GetPreStepPoint()->GetMaterial(); 
             G4MaterialPropertiesTable *Yield = plastic_scin->GetMaterialPropertiesTable(); 
@@ -81,7 +81,7 @@ if(particle->GetParticleName()== "mu+" ||  particle->GetParticleName() == "pi+" 
          G4double edep_B = step->GetTotalEnergyDeposit();
          if (edep_B > 0.&& stepLength > 0.)
          {
-            G4double dEdxStep_B = edep_B  / stepLength ;
+             dEdxStep_B = edep_B  / stepLength ;
 
             G4Material *plastic_scin = step->GetPreStepPoint()->GetMaterial(); 
             G4MaterialPropertiesTable *Yield = plastic_scin->GetMaterialPropertiesTable(); 

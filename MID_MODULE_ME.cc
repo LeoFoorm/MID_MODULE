@@ -42,7 +42,7 @@ int main(int argc,char** argv)
     runManager->SetUserInitialization(new PhysicsList());
     runManager->SetUserInitialization(new ActionInitialization());
     
-    runManager->Initialize();
+    //runManager->Initialize();
     
     G4UIExecutive *ui = 0;
     if(argc==1)
@@ -54,7 +54,7 @@ int main(int argc,char** argv)
 
     G4UImanager *UImanager = G4UImanager::GetUIpointer();
 
-    UImanager->ApplyCommand("/run/verbose 2");
+    UImanager->ApplyCommand("/run/verbose 1");
     //UImanager->ApplyCommand("/control/verbose 2");
     //UImanager->ApplyCommand("/process/had/verbose 0");
 
@@ -68,7 +68,7 @@ int main(int argc,char** argv)
     UImanager->ApplyCommand("/vis/scene/endofEventAction accumulate");//to show the particle
     UImanager->ApplyCommand("/vis/set/volumeForField"); //MAGNETIC FIELD
     UImanager->ApplyCommand("/vis/scene/add/magneticField"); // MAGNETIC FIELD
-    UImanager->ApplyCommand("/vis/scene/add/axes 0 0 0 3.0156 m");
+    //UImanager->ApplyCommand("/vis/scene/add/axes 0 0 0 3.0156 m");
     UImanager->ApplyCommand("/vis/scene/add/hits");
     UImanager->ApplyCommand("/vis/scene/add/eventID");
     UImanager->ApplyCommand("/vis/scene/add/date");

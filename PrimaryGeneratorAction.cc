@@ -9,7 +9,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
  fParticleGun = new G4ParticleGun(1); //argument is particle per event
 
  G4ParticleTable *particleTable = G4ParticleTable::GetParticleTable();
- G4ParticleDefinition *particle = particleTable->FindParticle("mu+"); 
+ G4ParticleDefinition *particle = particleTable->FindParticle("mu-"); 
  fParticleGun->SetParticleDefinition(particle);
 
 }
@@ -35,7 +35,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
    
 
     G4double thetaMin = 0. * deg;
-    G4double thetaMax = 10.125 * deg; //10.125 * deg; to cover a circle inside the area
+    G4double thetaMax = 0. * deg; //10.125 * deg; to cover a circle inside the area
     G4double phiMin = 0. * deg;
     G4double phiMax = 360. * deg;
     G4double theta = thetaMin + (thetaMax - thetaMin) * G4UniformRand();
