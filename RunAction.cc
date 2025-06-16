@@ -53,10 +53,36 @@ RunAction::RunAction(): photonHits(40, 0)
   man->CreateNtupleSColumn("PARTICLE_NAME_ON_A"); //170
   man->CreateNtupleSColumn("PARTICLE_NAME_ON_B"); //171
 
+//------------------------------------------------------------------------
   man->CreateNtupleDColumn("total_edep_on_A"); //172
   man->CreateNtupleDColumn("total_edep_on_B"); //173
 
-  man->CreateNtupleDColumn("P_t"); //174
+  man->CreateNtupleDColumn("Total_dEdx_A"); //174
+  man->CreateNtupleDColumn("Total_dEdx_B"); //175
+
+  man->CreateNtupleDColumn("Total_Detected_Photons_A"); //176
+  man->CreateNtupleDColumn("Total_Detected_Photons_B"); //177
+
+  man->CreateNtupleDColumn("Total_Generated_Photons_A"); //178
+  man->CreateNtupleDColumn("Total_Generated_Photons_B"); //179
+
+
+  man->CreateNtupleDColumn("P_t"); //180 
+
+  man->CreateNtupleDColumn("Position_x_Detected_On_Layer_A"); //181
+  man->CreateNtupleDColumn("Position_y_Detected_On_Layer_A"); //182
+  man->CreateNtupleDColumn("Position_z_Detected_On_Layer_A"); //183
+
+  man->CreateNtupleDColumn("Position_x_Detected_On_Layer_B"); //184
+  man->CreateNtupleDColumn("Position_y_Detected_On_Layer_B"); //185
+  man->CreateNtupleDColumn("Position_z_Detected_On_Layer_B"); //186
+
+  man->CreateNtupleDColumn("Angle_respect_y_A"); //187
+  man->CreateNtupleDColumn("Angle_respect_y_B"); //188
+  man->CreateNtupleDColumn("Angle_rad_respect_y_A"); //189
+  man->CreateNtupleDColumn("Angle_rad_respect_y_B"); //190
+  
+
 
   man->FinishNtuple(1);
 

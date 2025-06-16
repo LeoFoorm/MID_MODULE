@@ -1,6 +1,7 @@
 //  STEPPING ACTION SOURCE
 
 #include "SteppingAction.hh"
+#include <vector>
 
 using namespace std;
 
@@ -22,6 +23,8 @@ const DetectorConstruction *detectorconstruction = static_cast < const DetectorC
 const std::vector<G4LogicalVolume*>& scoringVolumesA = detectorconstruction->GetScoringVolumesA();
 const std::vector<G4LogicalVolume*>& scoringVolumesB = detectorconstruction->GetScoringVolumesB();
    
+//const vector<G4LogicalVolume*>& Logic_Fibers_A = detectorconstruction->GetFibersVolumesA();
+//const vector<G4LogicalVolume*>& Logic_Fibers_B = detectorconstruction->GetFibersVolumesB();
 
 G4TouchableHandle touchedbar = step->GetPreStepPoint()->GetTouchableHandle(); 
  G4LogicalVolume* barvolume = touchedbar->GetVolume()->GetLogicalVolume();
@@ -49,7 +52,21 @@ if(particle->GetParticleName()== "mu+" ||  particle->GetParticleName() == "pi+" 
          G4int copyNumA = touchedbar->GetCopyNumber(); // Número de copia de la barra
          fEventAction->AddTraversedBar_A(copyNumA);
     
+
+        G4ThreeVector position_A = step->GetPostStepPoint()->GetPosition();
+       
+        G4double A_pos_x = position_A.x()/(cm);
+        G4double A_pos_y = position_A.y()/(cm);
+        G4double A_pos_z = position_A.z()/(cm);
+        
+     
+        fEventAction->Add_Positions_Layer_A_x(A_pos_x);
+        fEventAction->Add_Positions_Layer_A_y(A_pos_y);
+        fEventAction->Add_Positions_Layer_A_z(A_pos_z);
+      
+
          G4double edep_A = step->GetTotalEnergyDeposit();
+         
          if (edep_A > 0.&& stepLength > 0.)
          {
             dEdxStep_A = edep_A / stepLength ;
@@ -74,11 +91,23 @@ if(particle->GetParticleName()== "mu+" ||  particle->GetParticleName() == "pi+" 
         {
 
            
-                G4int copyNumB = touchedbar->GetCopyNumber(); // Número de copia de la barra
-                fEventAction->AddTraversedBar_B(copyNumB);
+            G4int copyNumB = touchedbar->GetCopyNumber(); // Número de copia de la barra
+            fEventAction->AddTraversedBar_B(copyNumB);
             
+            G4ThreeVector position_B = step->GetPostStepPoint()->GetPosition();
+       
+            G4double B_pos_x = position_B.x()/(cm);
+            G4double B_pos_y = position_B.y()/(cm);
+            G4double B_pos_z = position_B.z()/(cm);
+        
+     
+            fEventAction->Add_Positions_Layer_B_x(B_pos_x);
+            fEventAction->Add_Positions_Layer_B_y(B_pos_y);
+            fEventAction->Add_Positions_Layer_B_z(B_pos_z);
 
-         G4double edep_B = step->GetTotalEnergyDeposit();
+
+            G4double edep_B = step->GetTotalEnergyDeposit();
+
          if (edep_B > 0.&& stepLength > 0.)
          {
              dEdxStep_B = edep_B  / stepLength ;

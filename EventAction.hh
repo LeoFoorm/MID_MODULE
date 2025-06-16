@@ -155,6 +155,44 @@ void Particle_Name_Pierced_Layer_B(G4String name_b){
 
 vector<G4String> Get_particle_names_B() const {return particles_names_B;}
 
+
+//-------------------- LAYER A --------------------------
+void Add_Positions_Layer_A_x(G4double pos_xa){
+    pos_layer_A_x.push_back(pos_xa);
+}
+vector<G4double> Get_pos_x_a() const {return pos_layer_A_x;}
+
+
+void Add_Positions_Layer_A_y(G4double pos_ya){
+    pos_layer_A_y.push_back(pos_ya);
+}
+vector<G4double> Get_pos_y_a() const {return pos_layer_A_y;}
+
+
+void Add_Positions_Layer_A_z(G4double pos_za){
+    pos_layer_A_z.push_back(pos_za);
+}
+vector<G4double> Get_pos_z_a() const {return pos_layer_A_z;}
+
+
+//-------------------- LAYER B --------------------------
+void Add_Positions_Layer_B_x(G4double pos_xb){
+    pos_layer_B_x.push_back(pos_xb);
+}
+vector<G4double> Get_pos_x_b() const {return pos_layer_B_x;}
+
+
+void Add_Positions_Layer_B_y(G4double pos_yb){
+    pos_layer_B_y.push_back(pos_yb);
+}
+vector<G4double> Get_pos_y_b() const {return pos_layer_B_y;}
+
+
+void Add_Positions_Layer_B_z(G4double pos_zb){
+    pos_layer_B_z.push_back(pos_zb);
+}
+vector<G4double> Get_pos_z_b() const {return pos_layer_B_z;}
+
 //---------------------------------------------------------
 
 
@@ -187,6 +225,14 @@ G4double TOTAL_Generated_photons;
 
 G4double total_edep_A;
 G4double total_edep_B;
+
+vector<G4double> pos_layer_A_x;
+vector<G4double> pos_layer_A_y;
+vector<G4double> pos_layer_A_z;
+
+vector<G4double> pos_layer_B_x;
+vector<G4double> pos_layer_B_y;
+vector<G4double> pos_layer_B_z;
  
 
  G4int muonCount;

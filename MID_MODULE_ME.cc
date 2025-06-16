@@ -63,12 +63,13 @@ int main(int argc,char** argv)
     UImanager->ApplyCommand("/vis/open OGL");
     UImanager->ApplyCommand("/vis/viewer/set/ViewpointVector 1 1 1");
     UImanager->ApplyCommand("/vis/drawVolume");
+    //UImanager->ApplyCommand("/vis/viewer/set/style surface");
     UImanager->ApplyCommand("/vis/viewer/set/autoRefresh true");//update everytime it creates a new event
     UImanager->ApplyCommand("/vis/scene/add/trajectories smooth");//to show the particle
     UImanager->ApplyCommand("/vis/scene/endofEventAction accumulate");//to show the particle
-    UImanager->ApplyCommand("/vis/set/volumeForField"); //MAGNETIC FIELD
-    UImanager->ApplyCommand("/vis/scene/add/magneticField"); // MAGNETIC FIELD
-    //UImanager->ApplyCommand("/vis/scene/add/axes 0 0 0 3.0156 m");
+    //UImanager->ApplyCommand("/vis/set/volumeForField"); //MAGNETIC FIELD
+    //UImanager->ApplyCommand("/vis/scene/add/magneticField"); // MAGNETIC FIELD
+    UImanager->ApplyCommand("/vis/scene/add/axes 0 0 0 0.5 m");
     UImanager->ApplyCommand("/vis/scene/add/hits");
     UImanager->ApplyCommand("/vis/scene/add/eventID");
     UImanager->ApplyCommand("/vis/scene/add/date");

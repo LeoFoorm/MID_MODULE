@@ -15,6 +15,7 @@
 #include "G4HadronPhysicsQGSP_BERT.hh"  
 
 #include "G4EmExtraPhysics.hh"
+#include "G4StoppingPhysics.hh"
 //#include "G4HadronElasticPhysicsHP.hh"
 
 //#include "G4StoppingPhysics.hh"
