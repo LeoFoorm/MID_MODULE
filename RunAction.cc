@@ -38,8 +38,8 @@ RunAction::RunAction(): photonHits(40, 0)
       columnName << "Photons_Generated_perEvent_on_Bar_" << l;
       man->CreateNtupleDColumn(columnName.str());
   }
-  man->CreateNtupleDColumn("Particle_Momentum_MeV");
-  man->CreateNtupleDColumn("Particle_Momentum_GeV");
+  man->CreateNtupleDColumn("Particle_Momentum_MeV"); //160
+  man->CreateNtupleDColumn("Particle_Momentum_GeV"); //161
   man->CreateNtupleDColumn("angle");  //162
   man->CreateNtupleDColumn("Copy_num_Bar_Traversed_A"); //163
   man->CreateNtupleDColumn("Copy_num_Bar_Traversed_B"); //164
@@ -81,10 +81,64 @@ RunAction::RunAction(): photonHits(40, 0)
   man->CreateNtupleDColumn("Angle_respect_y_B"); //188
   man->CreateNtupleDColumn("Angle_rad_respect_y_A"); //189
   man->CreateNtupleDColumn("Angle_rad_respect_y_B"); //190
-  
 
+
+
+  man->CreateNtupleDColumn("Total_Energy_Deposit_Absorber"); //191
+
+
+  //__________________________________________________________________________________________
+ // man->CreateNtupleDColumn("total_edep_all_aprticles"); 
+  man->CreateNtupleDColumn("total_edep_sec_aprticles"); //192
+
+  //man->CreateNtupleDColumn("Total_Edep_A_all"); //
+  //man->CreateNtupleDColumn("Total_Edep_B_all"); //
+
+  man->CreateNtupleDColumn("Total_Edep_A_sec"); //193
+  man->CreateNtupleDColumn("Total_Edep_B_sec"); //194
+
+
+  //man->CreateNtupleDColumn("Total_Detected_Photons_A_all"); //
+  //man->CreateNtupleDColumn("Total_Detected_Photons_B_all"); //
+  //man->CreateNtupleIColumn("Total_Photons_Detected_all");  //
+
+  man->CreateNtupleDColumn("Total_Detected_Photons_A_sec"); //195
+  man->CreateNtupleDColumn("Total_Detected_Photons_B_sec"); //196
+  man->CreateNtupleIColumn("Total_Photons_Detected_sec");  //197
+
+
+  //man->CreateNtupleDColumn("Total_Photons_Generated_all"); //
+  //man->CreateNtupleDColumn("Total_Generated_Photons_A_all"); //
+  //man->CreateNtupleDColumn("Total_Generated_Photons_B_all"); //
+
+  man->CreateNtupleDColumn("Total_Photons_Generated_sec"); //198
+  man->CreateNtupleDColumn("Total_Generated_Photons_A_sec"); //199
+  man->CreateNtupleDColumn("Total_Generated_Photons_B_sec"); //200
 
   man->FinishNtuple(1);
+
+
+
+
+
+  man->CreateNtuple("Edep_2","Data from each event");  
+  man->CreateNtupleDColumn("Copy_num_Bar_Traversed_A_s"); //201-0
+  man->CreateNtupleDColumn("Copy_num_Bar_Traversed_B_s"); //202-1
+
+  man->CreateNtupleSColumn("PARTICLE_NAME_ON_A_s"); //203-2
+  man->CreateNtupleSColumn("PARTICLE_NAME_ON_B_s"); //204-3
+
+
+
+  man->CreateNtupleDColumn("Position_x_Detected_On_Layer_A_s"); //205-4
+  man->CreateNtupleDColumn("Position_y_Detected_On_Layer_A_s"); //206-5
+  man->CreateNtupleDColumn("Position_z_Detected_On_Layer_A_s"); //207-6
+
+  man->CreateNtupleDColumn("Position_x_Detected_On_Layer_B_s"); //208-7
+  man->CreateNtupleDColumn("Position_y_Detected_On_Layer_B_s"); //209-8
+  man->CreateNtupleDColumn("Position_z_Detected_On_Layer_B_s"); //210-9
+
+  man->FinishNtuple(2);
 
 
  

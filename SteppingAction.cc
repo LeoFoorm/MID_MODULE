@@ -22,6 +22,7 @@ const DetectorConstruction *detectorconstruction = static_cast < const DetectorC
  
 const std::vector<G4LogicalVolume*>& scoringVolumesA = detectorconstruction->GetScoringVolumesA();
 const std::vector<G4LogicalVolume*>& scoringVolumesB = detectorconstruction->GetScoringVolumesB();
+G4LogicalVolume* scoringVolume_Absorber = detectorconstruction->GetScoringVolumeAbsorber();
    
 //const vector<G4LogicalVolume*>& Logic_Fibers_A = detectorconstruction->GetFibersVolumesA();
 //const vector<G4LogicalVolume*>& Logic_Fibers_B = detectorconstruction->GetFibersVolumesB();
@@ -41,10 +42,27 @@ G4StepPoint *PreStep = step->GetPreStepPoint();
   
  
 if(particle->GetParticleName()== "mu+" ||  particle->GetParticleName() == "pi+" ){
+
    G4double dEdxStep_A = 0.0; 
    G4double dEdxStep_B = 0.0;
    G4double generated_photons_A = 0.0;
    G4double generated_photons_B = 0.0;
+
+   if(barvolume == scoringVolume_Absorber){
+      
+	   G4double edep_abs = 0.0;
+	   G4double dEdx_abs = 0.0;
+
+	   edep_abs = step-> GetTotalEnergyDeposit()
+		   ;
+	   if (edep_abs > 0. && stepLength > 0.){
+	   
+		fEventAction->AddEdepAbs(edep_abs);
+
+
+	   }
+      
+   }
    
          if (std::find(scoringVolumesA.begin(), scoringVolumesA.end(), barvolume) != scoringVolumesA.end())
         {
@@ -135,38 +153,209 @@ if(particle->GetParticleName()== "mu+" ||  particle->GetParticleName() == "pi+" 
 }
 
 // ---------------------------------------------------------------------------------
+
+
+
         
+//----------------------- DATA WITH PRIMARY AND SEOCNDARIES, TOGEHTER -------------------------------------------------------
 
 if(particle->GetParticleName()!= "opticalphoton"){
+
+   //G4double generated_photons_A_all = 0.0;
+   //G4double generated_photons_B_all = 0.0;
+
  if (std::find(scoringVolumesA.begin(), scoringVolumesA.end(), barvolume) != scoringVolumesA.end())
         {
 
-         //G4int copyNumA = touchedbar->GetCopyNumber(); 
+
+        // G4int copyNumA_all = touchedbar->GetCopyNumber(); // Número de copia de la barra
+         //fEventAction->AddTraversedBar_A_all(copyNumA_all);
+
+
+      /*G4ThreeVector position_A_all = step->GetPostStepPoint()->GetPosition();
+       
+        G4double A_pos_x_all = position_A_all.x()/(cm);
+        G4double A_pos_y_all = position_A_all.y()/(cm);
+        G4double A_pos_z_all = position_A_all.z()/(cm);
+        
+     
+        fEventAction->Add_Positions_Layer_A_x_all(A_pos_x_all);
+        fEventAction->Add_Positions_Layer_A_y_all(A_pos_y_all);
+        fEventAction->Add_Positions_Layer_A_z_all(A_pos_z_all);*/
+      
          
-         G4double edep_others_A = step->GetTotalEnergyDeposit();
-         if (edep_others_A > 0.&& stepLength > 0.)
+         G4double edep_A_all = step->GetTotalEnergyDeposit();
+
+         if (edep_A_all > 0.&& stepLength > 0.)
          {
+
             G4String p_name = step->GetTrack()->GetDefinition()->GetParticleName();
-           
-            fEventAction->Particle_Name_Pierced_Layer_A(p_name);    
+            fEventAction->Particle_Name_Pierced_Layer_A(p_name);
+            
+
+            /*G4Material *plastic_scin = step->GetPreStepPoint()->GetMaterial(); 
+            G4MaterialPropertiesTable *Yield = plastic_scin->GetMaterialPropertiesTable(); 
+            G4double Scintillation_Yield = Yield->GetConstProperty("SCINTILLATIONYIELD");
+
+            generated_photons_A_all = edep_A_all * Scintillation_Yield; 
+            generated_photons_A_all = G4Poisson(generated_photons_A_all); 
+
+            size_t a = std::distance(scoringVolumesA.begin(),
+                                              std::find(scoringVolumesA.begin(), scoringVolumesA.end(), barvolume));
+            
+            fEventAction->AddPhotonG_UsingEdep_A_all(a, generated_photons_A_all);
+            fEventAction->AddEdepA_all(a, edep_A_all);*/
+              
+
+            
          }}
       
 
  if (std::find(scoringVolumesB.begin(), scoringVolumesB.end(), barvolume) != scoringVolumesB.end())
         {
 
-         //G4int copyNumB = touchedbar->GetCopyNumber(); 
+         /*G4int copyNumB_all = touchedbar->GetCopyNumber(); // Número de copia de la barra
+         fEventAction->AddTraversedBar_B_all(copyNumB_all); 
+
+         G4ThreeVector position_B_all = step->GetPostStepPoint()->GetPosition();
+       
+         G4double B_pos_x_all = position_B_all.x()/(cm);
+         G4double B_pos_y_all = position_B_all.y()/(cm);
+         G4double B_pos_z_all = position_B_all.z()/(cm);
+         
+      
+         fEventAction->Add_Positions_Layer_B_x_all(B_pos_x_all);
+         fEventAction->Add_Positions_Layer_B_y_all(B_pos_y_all);
+         fEventAction->Add_Positions_Layer_B_z_all(B_pos_z_all);*/
+
                 
-         G4double edep_others_B = step->GetTotalEnergyDeposit();
-         if (edep_others_B > 0.&& stepLength > 0.)
+         G4double edep_B_all = step->GetTotalEnergyDeposit();
+
+         if (edep_B_all > 0.&& stepLength > 0.)
          {
+
             G4String p_name = step->GetTrack()->GetDefinition()->GetParticleName();
-           
-            fEventAction->Particle_Name_Pierced_Layer_B(p_name);  
+            fEventAction->Particle_Name_Pierced_Layer_B(p_name); 
+            
+            
+            /*G4Material *plastic_scin = step->GetPreStepPoint()->GetMaterial(); 
+            G4MaterialPropertiesTable *Yield = plastic_scin->GetMaterialPropertiesTable(); 
+            G4double Scintillation_Yield = Yield->GetConstProperty("SCINTILLATIONYIELD");
+
+            generated_photons_B_all = edep_B_all * Scintillation_Yield; 
+            generated_photons_B_all = G4Poisson(generated_photons_B_all); 
+
+            size_t b = std::distance(scoringVolumesB.begin(),
+                                              std::find(scoringVolumesB.begin(), scoringVolumesB.end(), barvolume));
+            
+            fEventAction->AddPhotonG_UsingEdep_B_all(b, generated_photons_B_all);
+            fEventAction->AddEdepB_all(b, edep_B_all);*/
         
+
+            
          }
          }
 }
+  
+
+
+
+//----------------------- DATA WITH SEOCNDARIES -------------------------------------------------------------------------------------------
+
+if(particle->GetParticleName()!= "opticalphoton" && particle->GetParticleName()!= "mu+" &&particle->GetParticleName()!= "pi+"){
+
+
+   G4double generated_photons_A_s = 0.0;
+   G4double generated_photons_B_s = 0.0;
+
+ if (std::find(scoringVolumesA.begin(), scoringVolumesA.end(), barvolume) != scoringVolumesA.end())
+        {
+
+         G4int copyNumA_s = touchedbar->GetCopyNumber(); // Número de copia de la barra
+         fEventAction->AddTraversedBar_A_s(copyNumA_s);
+
+
+         G4ThreeVector position_A_s = step->GetPostStepPoint()->GetPosition();
+       
+         G4double A_pos_x_s = position_A_s.x()/(cm);
+         G4double A_pos_y_s = position_A_s.y()/(cm);
+         G4double A_pos_z_s = position_A_s.z()/(cm);
+         
+      
+         fEventAction->Add_Positions_Layer_A_x_s(A_pos_x_s);
+         fEventAction->Add_Positions_Layer_A_y_s(A_pos_y_s);
+         fEventAction->Add_Positions_Layer_A_z_s(A_pos_z_s);
+       
+         
+         G4double edep_A_s = step->GetTotalEnergyDeposit();
+
+         if (edep_A_s > 0.&& stepLength > 0.)
+         {
+
+            G4String p_name = step->GetTrack()->GetDefinition()->GetParticleName();
+            fEventAction->Particle_Name_Pierced_Layer_A_s(p_name);
+            
+
+
+            G4Material *plastic_scin = step->GetPreStepPoint()->GetMaterial(); 
+            G4MaterialPropertiesTable *Yield = plastic_scin->GetMaterialPropertiesTable(); 
+            G4double Scintillation_Yield = Yield->GetConstProperty("SCINTILLATIONYIELD");
+
+            generated_photons_A_s = edep_A_s* Scintillation_Yield; 
+            generated_photons_A_s = G4Poisson(generated_photons_A_s); 
+
+            size_t a = std::distance(scoringVolumesA.begin(),
+                                              std::find(scoringVolumesA.begin(), scoringVolumesA.end(), barvolume));
+            
+            fEventAction->AddPhotonG_UsingEdep_A_s(a, generated_photons_A_s);
+            fEventAction->AddEdepA_s(a, edep_A_s);
+            
+         }}
+      
+
+ if (std::find(scoringVolumesB.begin(), scoringVolumesB.end(), barvolume) != scoringVolumesB.end())
+        {
+
+         G4int copyNumB_s = touchedbar->GetCopyNumber(); // Número de copia de la barra
+         fEventAction->AddTraversedBar_B_s(copyNumB_s); 
+
+
+         G4ThreeVector position_B_s = step->GetPostStepPoint()->GetPosition();
+       
+         G4double B_pos_x_s = position_B_s.x()/(cm);
+         G4double B_pos_y_s = position_B_s.y()/(cm);
+         G4double B_pos_z_s = position_B_s.z()/(cm);
+         
+      
+         fEventAction->Add_Positions_Layer_B_x_s(B_pos_x_s);
+         fEventAction->Add_Positions_Layer_B_y_s(B_pos_y_s);
+         fEventAction->Add_Positions_Layer_B_z_s(B_pos_z_s);
+
+                
+         G4double edep_B_s = step->GetTotalEnergyDeposit();
+         
+         if (edep_B_s > 0.&& stepLength > 0.)
+         {
+
+            G4String p_name = step->GetTrack()->GetDefinition()->GetParticleName();
+            fEventAction->Particle_Name_Pierced_Layer_B_s(p_name);  
         
+
+            G4Material *plastic_scin = step->GetPreStepPoint()->GetMaterial(); 
+            G4MaterialPropertiesTable *Yield = plastic_scin->GetMaterialPropertiesTable(); 
+            G4double Scintillation_Yield = Yield->GetConstProperty("SCINTILLATIONYIELD");
+
+            generated_photons_B_s = edep_B_s * Scintillation_Yield; 
+            generated_photons_B_s = G4Poisson(generated_photons_B_s); 
+
+            size_t b = std::distance(scoringVolumesB.begin(),
+                                              std::find(scoringVolumesB.begin(), scoringVolumesB.end(), barvolume));
+            
+            fEventAction->AddPhotonG_UsingEdep_B_s(b, generated_photons_B_s);
+            fEventAction->AddEdepB_s(b, edep_B_s);
+            
+         }
+         }
+  }
 }
 

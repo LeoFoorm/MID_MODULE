@@ -60,6 +60,11 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     }
 
 
+    G4LogicalVolume* GetScoringVolumeAbsorber() const {
+      return fScoringVolume_Abs;
+      }
+
+
    std::vector<G4LogicalVolume*> LogicBars_A;
    std::vector<G4LogicalVolume*> LogicSiPMs_A;
    std::vector<G4LogicalVolume*> fScoringVolumes_A;
@@ -71,6 +76,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
    std::vector<G4LogicalVolume*> fScoringVolumes_B;
       std::vector<G4LogicalVolume*> Logic_Fibers_B;
       std::vector<G4LogicalVolume*> Logic_claddings_B;
+
 
 
     G4double wavelength, lightOutput;
@@ -95,7 +101,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
 
     G4LogicalVolume *LogicWorld, *Logicbar, *Logicmylar, *Logicsipm, *LogicalSA,
                     *LogicCube, *Logicbar_A, *Logicbar_B, *Logicsipm_A, *Logicsipm_B,
-                    *Logic_Fiber_A, *Logic_Fiber_B,
+                    *Logic_Fiber_A, *Logic_Fiber_B, *fScoringVolume_Abs,
                     *Logic_cladding_A, *Logic_cladding_B;;
 
     G4VPhysicalVolume *PhysicalWorld, *Physicalbar, *Physicalsipm, *Physicalmylar, *PhysicalSA, *PhysicalCube,
@@ -115,7 +121,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     G4Cache<F01FieldSetup*>    fEmFieldSetup;
 
         
-    vector<G4VisAttributes*> fVisAttributes;
+    //vector<G4VisAttributes*> fVisAttributes;
     
   
 };

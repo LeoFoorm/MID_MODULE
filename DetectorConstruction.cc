@@ -15,12 +15,12 @@
 
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
-#include "G4VisAttributes.hh"
+//#include "G4VisAttributes.hh"
 
 using namespace std;
 
-
-DetectorConstruction::DetectorConstruction(): fVisAttributes()
+//: fVisAttributes()
+DetectorConstruction::DetectorConstruction()
 {
   fMessenger = new G4GenericMessenger(this, "/detector/", "Detector Construction");
   fMessenger->DeclareProperty("MID_Module", MID_Module, "Construct MID module detector");
@@ -39,10 +39,10 @@ DetectorConstruction::DetectorConstruction(): fVisAttributes()
 
 
 DetectorConstruction::~DetectorConstruction()
-{for (auto visAttributes: fVisAttributes)
+{/*for (auto visAttributes: fVisAttributes)
   {
     delete visAttributes;
-  }}
+  }*/}
 
 
 void DetectorConstruction::DefineMaterials()
@@ -266,6 +266,21 @@ void DetectorConstruction::ConstructMIDModule()
 
  Solid_cladding = new G4Tubs("CLADDING", innerR_clad, outerR_clad, hz_clad, startAngle_clad, spanningAngle_clad);
 
+// ==========  Optical surface  (CORE-CLADDING) ========== 
+op_surface_core_clad = new G4OpticalSurface("CoreCladSurface");
+op_surface_core_clad->SetType(dielectric_dielectric); 
+op_surface_core_clad->SetFinish(polished);
+op_surface_core_clad->SetModel(glisur);
+//G4LogicalBorderSurface* border_clad_core_A = new G4LogicalBorderSurface( "Border_clad_core_A", Physical_cladding_A, Physical_Fiber_A, op_surface_core_clad);
+
+
+// ==========  Optical surface (CLADDING-BAR) ========== 
+ op_surface_bar_clad = new G4OpticalSurface("BarCladSurface"); 
+ op_surface_bar_clad->SetType(dielectric_dielectric); 
+ op_surface_bar_clad->SetFinish(polished);
+ op_surface_bar_clad->SetModel(glisur);
+ //G4LogicalBorderSurface* border_clad_bar_A = new G4LogicalBorderSurface( "Border_clad_bar_A", Physical_cladding_A, Physical_MID_A, op_surface_bar_clad);
+
 
 
 //             20 SCINTILLATION BARS A 
@@ -302,7 +317,7 @@ void DetectorConstruction::ConstructMIDModule()
                                     Logicmylar, "Physical_Mylar_MID_A", LogicWorld, false, k, true);
   }
 
-//            60 FIBERS A 
+//            60 FIBERS and CLADDING A 
 
 for (G4int l = 0; l < 20; l++)
  {
@@ -311,7 +326,16 @@ for (G4int l = 0; l < 20; l++)
 
   Physical_Fiber_A = new  G4PVPlacement(0, G4ThreeVector(-50.968 * cm + (5.102*l) * cm, 0, 0),
                                    Logic_Fiber_A, "Physical_Fiber_A_middle", LogicWorld, false, l, true);
+  
+  Logic_cladding_A= new G4LogicalVolume(Solid_cladding, cladding, "Logic_cladding_A_"+std::to_string(l));
+  Logic_claddings_A.push_back(Logic_cladding_A);
+                                 
+  Physical_cladding_A = new  G4PVPlacement(0, G4ThreeVector(-50.968 * cm + (5.102*l) * cm, 0, 0),
+                                                                    Logic_cladding_A, "Physical_cladding_A_middle", LogicWorld, false, l, true);
+
+  G4LogicalBorderSurface* border_clad_core_A = new G4LogicalBorderSurface( "Border_clad_core_A", Physical_cladding_A, Physical_Fiber_A, op_surface_core_clad);                       
  }
+
  for (G4int l = 0; l < 20; l++)
  {
   Logic_Fiber_A= new G4LogicalVolume(Solid_fiber, fiber_core, "Logic_fiber_A_"+std::to_string(l));
@@ -319,7 +343,16 @@ for (G4int l = 0; l < 20; l++)
 
   Physical_Fiber_A = new  G4PVPlacement(0, G4ThreeVector(-50.968 * cm + (5.102*l) * cm, 0.1 * cm, 0),
                                    Logic_Fiber_A, "Physical_Fiber_A_up", LogicWorld, false, l, true);
+
+  Logic_cladding_A= new G4LogicalVolume(Solid_cladding, cladding, "Logic_cladding_A_"+std::to_string(l));
+  Logic_claddings_A.push_back(Logic_cladding_A);
+
+  Physical_cladding_A = new  G4PVPlacement(0, G4ThreeVector(-50.968 * cm + (5.102*l) * cm, 0.1 * cm, 0),
+                                 Logic_cladding_A, "Physical_cladding_A_up", LogicWorld, false, l, true);
+  
+  G4LogicalBorderSurface* border_clad_core_A_up = new G4LogicalBorderSurface( "Border_clad_core_A_up", Physical_cladding_A, Physical_Fiber_A, op_surface_core_clad);
  }
+
  for (G4int l = 0; l < 20; l++)
  {
   Logic_Fiber_A= new G4LogicalVolume(Solid_fiber, fiber_core, "Logic_fiber_A_"+std::to_string(l));
@@ -327,49 +360,46 @@ for (G4int l = 0; l < 20; l++)
 
   Physical_Fiber_A = new  G4PVPlacement(0, G4ThreeVector(-50.968 * cm + (5.102*l) * cm, - 0.1 * cm, 0),
                                    Logic_Fiber_A, "Physical_Fiber_A_down", LogicWorld, false, l, true);
+
+  Logic_cladding_A= new G4LogicalVolume(Solid_cladding, cladding, "Logic_cladding_A_"+std::to_string(l));
+  Logic_claddings_A.push_back(Logic_cladding_A);
+
+  Physical_cladding_A = new  G4PVPlacement(0, G4ThreeVector(-50.968* cm + (5.102*l) * cm, - 0.1 * cm, 0),
+                                 Logic_cladding_A, "Physical_cladding_A_down", LogicWorld, false, l, true);
+
+  G4LogicalBorderSurface* border_clad_core_A_down = new G4LogicalBorderSurface( "Border_clad_core_A_down", Physical_cladding_A, Physical_Fiber_A, op_surface_core_clad);
  }
 
  //          60 CLADDING A
 
- for (G4int l = 0; l < 20; l++)
+ /*for (G4int l = 0; l < 20; l++)
  {
   Logic_cladding_A= new G4LogicalVolume(Solid_cladding, cladding, "Logic_cladding_A_"+std::to_string(l));
   Logic_claddings_A.push_back(Logic_cladding_A);
 
   Physical_cladding_A = new  G4PVPlacement(0, G4ThreeVector(-50.968 * cm + (5.102*l) * cm, 0, 0),
                                    Logic_cladding_A, "Physical_cladding_A_middle", LogicWorld, false, l, true);
- }
- for (G4int l = 0; l < 20; l++)
+ }*/
+ /*for (G4int l = 0; l < 20; l++)
  {
   Logic_cladding_A= new G4LogicalVolume(Solid_cladding, cladding, "Logic_cladding_A_"+std::to_string(l));
   Logic_claddings_A.push_back(Logic_cladding_A);
 
   Physical_cladding_A = new  G4PVPlacement(0, G4ThreeVector(-50.968 * cm + (5.102*l) * cm, 0.1 * cm, 0),
                                    Logic_cladding_A, "Physical_cladding_A_up", LogicWorld, false, l, true);
- }
- for (G4int l = 0; l < 20; l++)
+ }*/
+ /*for (G4int l = 0; l < 20; l++)
  {
   Logic_cladding_A= new G4LogicalVolume(Solid_cladding, cladding, "Logic_cladding_A_"+std::to_string(l));
   Logic_claddings_A.push_back(Logic_cladding_A);
 
   Physical_cladding_A = new  G4PVPlacement(0, G4ThreeVector(-50.968* cm + (5.102*l) * cm, - 0.1 * cm, 0),
                                    Logic_cladding_A, "Physical_cladding_A_down", LogicWorld, false, l, true);
- }
+ }*/
 
 
-// ==========  Optical surface  (CORE-CLADDING) ========== 
- op_surface_core_clad = new G4OpticalSurface("CoreCladSurface");
- op_surface_core_clad->SetType(dielectric_dielectric); 
- op_surface_core_clad->SetFinish(polished);
- op_surface_core_clad->SetModel(glisur);
- G4LogicalBorderSurface* border_clad_core_A = new G4LogicalBorderSurface( "Border_clad_core_A", Physical_cladding_A, Physical_Fiber_A, op_surface_core_clad);
 
- // ==========  Optical surface (CLADDING-BAR) ========== 
-  op_surface_bar_clad = new G4OpticalSurface("BarCladSurface"); 
-  op_surface_bar_clad->SetType(dielectric_dielectric); 
-  op_surface_bar_clad->SetFinish(polished);
-  op_surface_bar_clad->SetModel(glisur);
-  G4LogicalBorderSurface* border_clad_bar_A = new G4LogicalBorderSurface( "Border_clad_bar_A", Physical_cladding_A, Physical_MID_A, op_surface_bar_clad);
+
 
 // ====================  STEP LIMITS FOR FIBERS A ===============================
 G4double maxStep = 0.1 * mm;
@@ -423,7 +453,18 @@ for (G4int l = 0; l < 20; l++)
 
   Physical_Fiber_B = new  G4PVPlacement(rotationY, G4ThreeVector(0, distance_modules, -50.968 * cm + (5.102*l) * cm),
                                    Logic_Fiber_B, "Physical_Fiber_B_middle", LogicWorld, false, l+20, true);
+
+
+  Logic_cladding_B= new G4LogicalVolume(Solid_cladding, cladding, "Logic_cladding_B_"+std::to_string(l));
+  Logic_claddings_B.push_back(Logic_cladding_B);
+
+  Physical_cladding_B = new  G4PVPlacement(rotationY, G4ThreeVector(0, distance_modules,  -50.968 * cm + (5.102*l) * cm),
+                                 Logic_cladding_B, "Physical_cladding_B_middle", LogicWorld, false, l+20, true);
+
+G4LogicalBorderSurface* border_clad_bar_B = new G4LogicalBorderSurface( "Border_clad_bar_B", Physical_cladding_B, Physical_MID_B, op_surface_bar_clad);
+
  }
+
  for (G4int l = 0; l < 20; l++)
  {
   Logic_Fiber_B= new G4LogicalVolume(Solid_fiber, fiber_core, "Logic_fiber_B_"+std::to_string(l));
@@ -431,7 +472,17 @@ for (G4int l = 0; l < 20; l++)
 
   Physical_Fiber_B = new  G4PVPlacement(rotationY, G4ThreeVector(0, distance_modules + 0.1 * cm,  -50.968 * cm + (5.102*l) * cm),
                                    Logic_Fiber_B, "Physical_Fiber_B_up", LogicWorld, false, l+20, true);
+
+          
+  Logic_cladding_B= new G4LogicalVolume(Solid_cladding, cladding, "Logic_cladding_B_"+std::to_string(l));
+  Logic_claddings_B.push_back(Logic_cladding_B);
+
+  Physical_cladding_B = new  G4PVPlacement(rotationY, G4ThreeVector(0, distance_modules + 0.1 * cm,  -50.968 * cm + (5.102*l) * cm),
+                                   Logic_cladding_B, "Physical_cladding_B_up", LogicWorld, false, l+20, true);
+                                  
+G4LogicalBorderSurface* border_clad_bar_B_up = new G4LogicalBorderSurface( "Border_clad_bar_B_up", Physical_cladding_B, Physical_MID_B, op_surface_bar_clad);
  }
+
  for (G4int l = 0; l < 20; l++)
  {
   Logic_Fiber_B= new G4LogicalVolume(Solid_fiber, fiber_core, "Logic_fiber_B_"+std::to_string(l));
@@ -439,11 +490,20 @@ for (G4int l = 0; l < 20; l++)
 
   Physical_Fiber_B = new  G4PVPlacement(rotationY, G4ThreeVector(0 ,distance_modules - 0.1 * cm,  -50.968 * cm + (5.102*l) * cm),
                                    Logic_Fiber_B, "Physical_Fiber_B_down", LogicWorld, false, l+20, true);
+  
+                                   
+  Logic_cladding_B= new G4LogicalVolume(Solid_cladding, cladding, "Logic_cladding_B_"+std::to_string(l));
+  Logic_claddings_B.push_back(Logic_cladding_B);
+
+  Physical_cladding_B = new  G4PVPlacement(rotationY, G4ThreeVector(0,distance_modules  - 0.1 * cm,  -50.968 * cm + (5.102*l) * cm),
+                                 Logic_cladding_B, "Physical_cladding_B_down", LogicWorld, false, l+20, true);
+
+G4LogicalBorderSurface* border_clad_bar_B_down = new G4LogicalBorderSurface( "Border_clad_bar_B_down", Physical_cladding_B, Physical_MID_B, op_surface_bar_clad);
  }
 
  //          60 CLADDING B
 
- for (G4int l = 0; l < 20; l++)
+ /*for (G4int l = 0; l < 20; l++)
  {
   Logic_cladding_B= new G4LogicalVolume(Solid_cladding, cladding, "Logic_cladding_B_"+std::to_string(l));
   Logic_claddings_B.push_back(Logic_cladding_B);
@@ -467,19 +527,55 @@ for (G4int l = 0; l < 20; l++)
 
   Physical_cladding_B = new  G4PVPlacement(rotationY, G4ThreeVector(0,distance_modules  - 0.1 * cm,  -50.968 * cm + (5.102*l) * cm),
                                    Logic_cladding_B, "Physical_cladding_B_down", LogicWorld, false, l+20, true);
- }
+ }*/
 
-G4LogicalBorderSurface* border_clad_bar_B = new G4LogicalBorderSurface( "Border_clad_bar_B", Physical_cladding_B, Physical_MID_B, op_surface_bar_clad);
-G4LogicalBorderSurface* border_clad_core_B = new G4LogicalBorderSurface( "Border_clad_core_B", Physical_cladding_B, Physical_Fiber_B, op_surface_core_clad);
+//G4LogicalBorderSurface* border_clad_bar_B = new G4LogicalBorderSurface( "Border_clad_bar_B", Physical_cladding_B, Physical_MID_B, op_surface_bar_clad);
+//G4LogicalBorderSurface* border_clad_core_B = new G4LogicalBorderSurface( "Border_clad_core_B", Physical_cladding_B, Physical_Fiber_B, op_surface_core_clad);
 
-for (auto& fiberLogic : Logic_Fibers_B) {
-      fiberLogic->SetUserLimits(fiberStepLimit);
-     }
+for (auto& fiberLogic : Logic_Fibers_B) 
+{
+  fiberLogic->SetUserLimits(fiberStepLimit);
+}
+
+
+
+
+     
+    
+    // CLADDING–BAR A y B
+   // for (size_t i = 0; i < LogicBars_A.size(); ++i) {
+     // new G4LogicalBorderSurface("Surface_CladBar_A_" + std::to_string(i),
+       //                          Physical_cladding_A[i], Physical_MID_A[i/3], op_surface_bar_clad); // Cada 3 fibras por barra
+    //}
+    /*for (size_t i = 0; i < Physical_claddings_B.size(); ++i) {
+      new G4LogicalBorderSurface("Surface_CladBar_B_" + std::to_string(i),
+                                 Physical_cladding_B[i], Physical_MID_B[i/3], op_surface_bar_clad);
+    }
+    
+    // CLADDING–AIRE A y B
+    for (size_t i = 0; i < Physical_claddings_A.size(); ++i) {
+      new G4LogicalBorderSurface("Surface_CladAir_A_" + std::to_string(i),
+                                 Physical_cladding_A[i], PhysicalWorld, op_surface_clad_air);
+    }
+    for (size_t i = 0; i < Physical_claddings_B.size(); ++i) {
+      new G4LogicalBorderSurface("Surface_CladAir_B_" + std::to_string(i),
+                                 Physical_cladding_B[i], PhysicalWorld, op_surface_clad_air);
+    }
+    
+    // BAR–AIRE A y B
+    for (size_t i = 0; i < Physical_MID_A.size(); ++i) {
+      new G4LogicalBorderSurface("Surface_BarAir_A_" + std::to_string(i),
+                                 Physical_MID_A[i], PhysicalWorld, op_surface_bar_air);
+    }
+    for (size_t i = 0; i < Physical_MID_B.size(); ++i) {
+      new G4LogicalBorderSurface("Surface_BarAir_B_" + std::to_string(i),
+                                 Physical_MID_B[i], PhysicalWorld, op_surface_bar_air);
+    }*/
 
 
   //---------------  STEEL-ABSORBER  ---------------
 
-  G4double SA_X = 50*cm;
+ G4double SA_X = 50*cm;
   G4double SA_Y = 35*cm;
   G4double SA_Z =50*cm;
 
@@ -487,73 +583,85 @@ for (auto& fiberLogic : Logic_Fibers_B) {
 
   SolidSA = new G4Box("SolidSA", SA_X, SA_Y, SA_Z );
  LogicalSA = new G4LogicalVolume(SolidSA, steel, "LogicSA");
+ 
+fScoringVolume_Abs = LogicalSA;
+
  PhysicalSA = new G4PVPlacement(0, positionSA, LogicalSA, "PhysicalSA", LogicWorld, false, 0, true);
 
 
 
 //              CUBE TO B FIELD
-  G4double BcubeX = 1.4 * m;
+  /*G4double BcubeX = 1.4 * m;
   G4double BcubeY = 1 * m;
   G4double BcubeZ = 1.4 * m;
 
   G4ThreeVector positioncube = G4ThreeVector(0, 2.0156 * m, 0);
   SolidCube = new G4Box("SolidCube", BcubeX, BcubeY, BcubeZ);
   LogicCube = new G4LogicalVolume(SolidCube, worldMaterial, "LogicCube");
- PhysicalCube = new G4PVPlacement(0, positioncube, LogicCube, "PhysicalCube_forB", LogicWorld, false, 100, true);
+ PhysicalCube = new G4PVPlacement(0, positioncube, LogicCube, "PhysicalCube_forB", LogicWorld, false, 100, true);*/
 
 
 
 
-
-
-/*auto visAttributes = new G4VisAttributes(G4Colour(1.0,1.0,1.0));
+/*
+// world
+auto visAttributes = new G4VisAttributes(G4Colour(1.0,1.0,1.0));
 visAttributes->SetVisibility(false);
 LogicWorld->SetVisAttributes(visAttributes);
 fVisAttributes.push_back(visAttributes);
 
+//cube to field, not available
 visAttributes = new G4VisAttributes(G4Colour(1.0,1.0,1.0));
 visAttributes->SetVisibility(false);
 LogicCube->SetVisAttributes(visAttributes);
 fVisAttributes.push_back(visAttributes);
 
+//absorber
 visAttributes = new G4VisAttributes(G4Colour(0.5, 0.5, 0.5, 0.6));
 visAttributes->SetVisibility(true);
 visAttributes->SetForceSolid(false);
 LogicalSA->SetVisAttributes(visAttributes);
 fVisAttributes.push_back(visAttributes);
 
+//mylar
 visAttributes = new G4VisAttributes(G4Colour(0.7, 0.85, 1.0, 0.1));
 visAttributes->SetVisibility(true);
 visAttributes->SetForceSolid(true);
 Logicmylar->SetVisAttributes(visAttributes);
 fVisAttributes.push_back(visAttributes);
 
+//scintillators
 visAttributes = new G4VisAttributes(G4Colour(0.9, 0.9, 0.9, 0.8));
 visAttributes->SetVisibility(true);
 visAttributes->SetForceSolid(true);
 Logicbar_A->SetVisAttributes(visAttributes);
 fVisAttributes.push_back(visAttributes);
 
+//scintillators
 visAttributes = new G4VisAttributes(G4Colour(0.9, 0.9, 0.9, 0.8));
 visAttributes->SetVisibility(true);
 visAttributes->SetForceSolid(true);
 Logicbar_B->SetVisAttributes(visAttributes);
 fVisAttributes.push_back(visAttributes);
+
+//fiber core
 visAttributes = new G4VisAttributes(G4Colour(0.0,0.0,1.0,0.9));
 visAttributes->SetVisibility(true);
 Logic_Fiber_A->SetVisAttributes(visAttributes);
 fVisAttributes.push_back(visAttributes);
 
+//cladding
 visAttributes = new G4VisAttributes(G4Colour(0.0,0.8,0.2,0.2));
 visAttributes->SetVisibility(true);
 Logic_cladding_A->SetVisAttributes(visAttributes);
 fVisAttributes.push_back(visAttributes);
 
+//SiPMs
 visAttributes = new G4VisAttributes(G4Colour(0.3,0.3,1.0,0.3));
 visAttributes->SetVisibility(true);
 Logicsipm_A->SetVisAttributes(visAttributes);
-fVisAttributes.push_back(visAttributes);*/
-
+fVisAttributes.push_back(visAttributes);
+*/
 
 }
 

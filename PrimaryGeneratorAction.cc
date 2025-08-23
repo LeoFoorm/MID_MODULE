@@ -9,7 +9,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
  fParticleGun = new G4ParticleGun(1); //argument is particle per event
 
  G4ParticleTable *particleTable = G4ParticleTable::GetParticleTable();
- G4ParticleDefinition *particle = particleTable->FindParticle("mu+"); 
+ G4ParticleDefinition *particle = particleTable->FindParticle("pi+"); 
  fParticleGun->SetParticleDefinition(particle);
 
 }
@@ -31,11 +31,11 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
 
    
-    G4ThreeVector position(0, 3.0156*m, 0); 
+    G4ThreeVector position(0.02*m, 3.0156*m, 0.02*m); 
    
 
     G4double thetaMin = 0. * deg;
-    G4double thetaMax = 0. * deg; //10.125 * deg; to cover a circle inside the area
+    G4double thetaMax = 0 * deg; //10.125 * deg; to cover a circle inside the area
     G4double phiMin = 0. * deg;
     G4double phiMax = 0. * deg;
     G4double theta = thetaMin + (thetaMax - thetaMin) * G4UniformRand();
@@ -63,8 +63,8 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 G4cout << "" << G4endl;                                                            
 G4cout << "------------------------------------------------------------" << G4endl;
 G4cout << "MOMENTUM FOR THIS EVENT: " << momentumParticle << " GeV/c \n" << G4endl;  
-G4cout << "TRANSVERSE MOMENTUM  [1] sqrt(px^2 + py^2) : " << p_t << " GeV/c \n"<<  G4endl;  
-G4cout << "TRANSVERSE MOMENTUM  [2] sqrt(px^2 + pZ^2) : " << p_t_b << " GeV/c \n"<<  G4endl;                                                         
+G4cout << "TRANSVERSE MOMENTUM   sqrt(px^2 + py^2) : " << p_t << " GeV/c \n"<<  G4endl;  
+//G4cout << "TRANSVERSE MOMENTUM  [2] sqrt(px^2 + pZ^2) : " << p_t_b << " GeV/c \n"<<  G4endl;                                                         
 G4cout << "PARTICLE ANGLE : " <<angle << "° \n"<<  G4endl;  // eta ?  
 
 
