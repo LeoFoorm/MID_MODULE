@@ -86,34 +86,26 @@ RunAction::RunAction(): photonHits(40, 0)
 
   man->CreateNtupleDColumn("Total_Energy_Deposit_Absorber"); //191
 
-
   //__________________________________________________________________________________________
- // man->CreateNtupleDColumn("total_edep_all_aprticles"); 
+
   man->CreateNtupleDColumn("total_edep_sec_aprticles"); //192
 
-  //man->CreateNtupleDColumn("Total_Edep_A_all"); //
-  //man->CreateNtupleDColumn("Total_Edep_B_all"); //
 
   man->CreateNtupleDColumn("Total_Edep_A_sec"); //193
   man->CreateNtupleDColumn("Total_Edep_B_sec"); //194
 
-
-  //man->CreateNtupleDColumn("Total_Detected_Photons_A_all"); //
-  //man->CreateNtupleDColumn("Total_Detected_Photons_B_all"); //
-  //man->CreateNtupleIColumn("Total_Photons_Detected_all");  //
 
   man->CreateNtupleDColumn("Total_Detected_Photons_A_sec"); //195
   man->CreateNtupleDColumn("Total_Detected_Photons_B_sec"); //196
   man->CreateNtupleIColumn("Total_Photons_Detected_sec");  //197
 
 
-  //man->CreateNtupleDColumn("Total_Photons_Generated_all"); //
-  //man->CreateNtupleDColumn("Total_Generated_Photons_A_all"); //
-  //man->CreateNtupleDColumn("Total_Generated_Photons_B_all"); //
 
   man->CreateNtupleDColumn("Total_Photons_Generated_sec"); //198
   man->CreateNtupleDColumn("Total_Generated_Photons_A_sec"); //199
   man->CreateNtupleDColumn("Total_Generated_Photons_B_sec"); //200
+
+  man->CreateNtupleDColumn("angle_phi");  //201
 
   man->FinishNtuple(1);
 
@@ -169,11 +161,6 @@ void RunAction:: BeginOfRunAction(const G4Run* run)
 void RunAction::EndOfRunAction(const G4Run*)
 {
  G4AnalysisManager *man = G4AnalysisManager::Instance();
-
- 
-  //G4cout << "NUMBER OF PHOTONS DETECTED: " << photonHits << G4endl; 
-
-  //man->FillNtupleDColumn(1,0,photonHits); //total
  
  man->Write();
  man->CloseFile();

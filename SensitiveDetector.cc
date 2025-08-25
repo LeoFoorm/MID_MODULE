@@ -13,6 +13,8 @@ SensitiveDetector::~ SensitiveDetector()
 G4bool SensitiveDetector::ProcessHits(G4Step *aStep, G4TouchableHistory *ROhist)
 {
     G4int evt = G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID();
+
+    
     G4Track *track = aStep->GetTrack();
     G4AnalysisManager *man = G4AnalysisManager::Instance(); 
     track->SetTrackStatus(fStopAndKill);

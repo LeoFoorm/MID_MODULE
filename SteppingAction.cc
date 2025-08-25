@@ -43,23 +43,20 @@ G4StepPoint *PreStep = step->GetPreStepPoint();
  
 if(particle->GetParticleName()== "mu+" ||  particle->GetParticleName() == "pi+" ){
 
-   G4double dEdxStep_A = 0.0; 
-   G4double dEdxStep_B = 0.0;
-   G4double generated_photons_A = 0.0;
-   G4double generated_photons_B = 0.0;
+   G4double dEdxStep_A ; 
+   G4double dEdxStep_B ;
+   G4double generated_photons_A;
+   G4double generated_photons_B ;
+
 
    if(barvolume == scoringVolume_Absorber){
       
-	   G4double edep_abs = 0.0;
-	   G4double dEdx_abs = 0.0;
+	   G4double edep_abs ;
+	   G4double dEdx_abs ;
 
-	   edep_abs = step-> GetTotalEnergyDeposit()
-		   ;
+	   edep_abs = step-> GetTotalEnergyDeposit();
 	   if (edep_abs > 0. && stepLength > 0.){
-	   
 		fEventAction->AddEdepAbs(edep_abs);
-
-
 	   }
       
    }
@@ -84,9 +81,16 @@ if(particle->GetParticleName()== "mu+" ||  particle->GetParticleName() == "pi+" 
       
 
          G4double edep_A = step->GetTotalEnergyDeposit();
+
+          G4double stepLength_New = step->GetStepLength(); //will be useful?
          
          if (edep_A > 0.&& stepLength > 0.)
          {
+
+            G4String p_name = step->GetTrack()->GetDefinition()->GetParticleName();
+            G4int trackID = step->GetTrack()->GetTrackID();       //<--- NEW
+            fEventAction->Particle_Name_Pierced_Layer_A(p_name, trackID);
+
             dEdxStep_A = edep_A / stepLength ;
 
             G4Material *plastic_scin = step->GetPreStepPoint()->GetMaterial(); 
@@ -128,6 +132,11 @@ if(particle->GetParticleName()== "mu+" ||  particle->GetParticleName() == "pi+" 
 
          if (edep_B > 0.&& stepLength > 0.)
          {
+
+            G4String p_name = step->GetTrack()->GetDefinition()->GetParticleName();
+            G4int trackID = step->GetTrack()->GetTrackID();         //<--- NEW
+            fEventAction->Particle_Name_Pierced_Layer_B(p_name, trackID);   //<--- NEW
+
              dEdxStep_B = edep_B  / stepLength ;
 
             G4Material *plastic_scin = step->GetPreStepPoint()->GetMaterial(); 
@@ -146,134 +155,27 @@ if(particle->GetParticleName()== "mu+" ||  particle->GetParticleName() == "pi+" 
         
          }
          }
-
-        // Obtener el número de copia del volumen
-        //G4int copynum = step->GetPreStepPoint()->GetTouchableHandle()->GetCopyNumber();
-              //fEventAction->WorkingBars(copynum);  
-}
+} 
 
 // ---------------------------------------------------------------------------------
 
 
 
-        
-//----------------------- DATA WITH PRIMARY AND SEOCNDARIES, TOGEHTER -------------------------------------------------------
-
-if(particle->GetParticleName()!= "opticalphoton"){
-
-   //G4double generated_photons_A_all = 0.0;
-   //G4double generated_photons_B_all = 0.0;
-
- if (std::find(scoringVolumesA.begin(), scoringVolumesA.end(), barvolume) != scoringVolumesA.end())
-        {
-
-
-        // G4int copyNumA_all = touchedbar->GetCopyNumber(); // Número de copia de la barra
-         //fEventAction->AddTraversedBar_A_all(copyNumA_all);
-
-
-      /*G4ThreeVector position_A_all = step->GetPostStepPoint()->GetPosition();
-       
-        G4double A_pos_x_all = position_A_all.x()/(cm);
-        G4double A_pos_y_all = position_A_all.y()/(cm);
-        G4double A_pos_z_all = position_A_all.z()/(cm);
-        
-     
-        fEventAction->Add_Positions_Layer_A_x_all(A_pos_x_all);
-        fEventAction->Add_Positions_Layer_A_y_all(A_pos_y_all);
-        fEventAction->Add_Positions_Layer_A_z_all(A_pos_z_all);*/
-      
-         
-         G4double edep_A_all = step->GetTotalEnergyDeposit();
-
-         if (edep_A_all > 0.&& stepLength > 0.)
-         {
-
-            G4String p_name = step->GetTrack()->GetDefinition()->GetParticleName();
-            fEventAction->Particle_Name_Pierced_Layer_A(p_name);
-            
-
-            /*G4Material *plastic_scin = step->GetPreStepPoint()->GetMaterial(); 
-            G4MaterialPropertiesTable *Yield = plastic_scin->GetMaterialPropertiesTable(); 
-            G4double Scintillation_Yield = Yield->GetConstProperty("SCINTILLATIONYIELD");
-
-            generated_photons_A_all = edep_A_all * Scintillation_Yield; 
-            generated_photons_A_all = G4Poisson(generated_photons_A_all); 
-
-            size_t a = std::distance(scoringVolumesA.begin(),
-                                              std::find(scoringVolumesA.begin(), scoringVolumesA.end(), barvolume));
-            
-            fEventAction->AddPhotonG_UsingEdep_A_all(a, generated_photons_A_all);
-            fEventAction->AddEdepA_all(a, edep_A_all);*/
-              
-
-            
-         }}
-      
-
- if (std::find(scoringVolumesB.begin(), scoringVolumesB.end(), barvolume) != scoringVolumesB.end())
-        {
-
-         /*G4int copyNumB_all = touchedbar->GetCopyNumber(); // Número de copia de la barra
-         fEventAction->AddTraversedBar_B_all(copyNumB_all); 
-
-         G4ThreeVector position_B_all = step->GetPostStepPoint()->GetPosition();
-       
-         G4double B_pos_x_all = position_B_all.x()/(cm);
-         G4double B_pos_y_all = position_B_all.y()/(cm);
-         G4double B_pos_z_all = position_B_all.z()/(cm);
-         
-      
-         fEventAction->Add_Positions_Layer_B_x_all(B_pos_x_all);
-         fEventAction->Add_Positions_Layer_B_y_all(B_pos_y_all);
-         fEventAction->Add_Positions_Layer_B_z_all(B_pos_z_all);*/
-
-                
-         G4double edep_B_all = step->GetTotalEnergyDeposit();
-
-         if (edep_B_all > 0.&& stepLength > 0.)
-         {
-
-            G4String p_name = step->GetTrack()->GetDefinition()->GetParticleName();
-            fEventAction->Particle_Name_Pierced_Layer_B(p_name); 
-            
-            
-            /*G4Material *plastic_scin = step->GetPreStepPoint()->GetMaterial(); 
-            G4MaterialPropertiesTable *Yield = plastic_scin->GetMaterialPropertiesTable(); 
-            G4double Scintillation_Yield = Yield->GetConstProperty("SCINTILLATIONYIELD");
-
-            generated_photons_B_all = edep_B_all * Scintillation_Yield; 
-            generated_photons_B_all = G4Poisson(generated_photons_B_all); 
-
-            size_t b = std::distance(scoringVolumesB.begin(),
-                                              std::find(scoringVolumesB.begin(), scoringVolumesB.end(), barvolume));
-            
-            fEventAction->AddPhotonG_UsingEdep_B_all(b, generated_photons_B_all);
-            fEventAction->AddEdepB_all(b, edep_B_all);*/
-        
-
-            
-         }
-         }
-}
-  
-
-
 
 //----------------------- DATA WITH SEOCNDARIES -------------------------------------------------------------------------------------------
+ if (particle->GetParticleName()!= "opticalphoton" && particle->GetParticleName()!= "mu+" && particle->GetParticleName()!= "pi+" ){
 
-if(particle->GetParticleName()!= "opticalphoton" && particle->GetParticleName()!= "mu+" &&particle->GetParticleName()!= "pi+"){
-
-
-   G4double generated_photons_A_s = 0.0;
-   G4double generated_photons_B_s = 0.0;
+   G4double edep_A_s  ;
+   G4double edep_B_s;
+   G4int generated_photons_A_s ;
+   G4int generated_photons_B_s ;
 
  if (std::find(scoringVolumesA.begin(), scoringVolumesA.end(), barvolume) != scoringVolumesA.end())
         {
 
-         G4int copyNumA_s = touchedbar->GetCopyNumber(); // Número de copia de la barra
+         G4int copyNumA_s = touchedbar->GetCopyNumber(); 
          fEventAction->AddTraversedBar_A_s(copyNumA_s);
-
+                       
 
          G4ThreeVector position_A_s = step->GetPostStepPoint()->GetPosition();
        
@@ -287,13 +189,14 @@ if(particle->GetParticleName()!= "opticalphoton" && particle->GetParticleName()!
          fEventAction->Add_Positions_Layer_A_z_s(A_pos_z_s);
        
          
-         G4double edep_A_s = step->GetTotalEnergyDeposit();
+          edep_A_s = step->GetTotalEnergyDeposit();
 
          if (edep_A_s > 0.&& stepLength > 0.)
          {
 
             G4String p_name = step->GetTrack()->GetDefinition()->GetParticleName();
-            fEventAction->Particle_Name_Pierced_Layer_A_s(p_name);
+            G4int trackID = step->GetTrack()->GetTrackID();    //<--- NEW
+            fEventAction->Particle_Name_Pierced_Layer_A_s(p_name, trackID);       //<--- NEW
             
 
 
@@ -316,7 +219,7 @@ if(particle->GetParticleName()!= "opticalphoton" && particle->GetParticleName()!
  if (std::find(scoringVolumesB.begin(), scoringVolumesB.end(), barvolume) != scoringVolumesB.end())
         {
 
-         G4int copyNumB_s = touchedbar->GetCopyNumber(); // Número de copia de la barra
+         G4int copyNumB_s = touchedbar->GetCopyNumber(); 
          fEventAction->AddTraversedBar_B_s(copyNumB_s); 
 
 
@@ -338,7 +241,8 @@ if(particle->GetParticleName()!= "opticalphoton" && particle->GetParticleName()!
          {
 
             G4String p_name = step->GetTrack()->GetDefinition()->GetParticleName();
-            fEventAction->Particle_Name_Pierced_Layer_B_s(p_name);  
+            G4int trackID = step->GetTrack()->GetTrackID();        //<--- NEW
+            fEventAction->Particle_Name_Pierced_Layer_B_s(p_name, trackID);   //<--- NEW
         
 
             G4Material *plastic_scin = step->GetPreStepPoint()->GetMaterial(); 
@@ -358,4 +262,5 @@ if(particle->GetParticleName()!= "opticalphoton" && particle->GetParticleName()!
          }
   }
 }
+
 
