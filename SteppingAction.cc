@@ -73,11 +73,12 @@ if(particle->GetParticleName()== "mu+" ||  particle->GetParticleName() == "pi+" 
         G4double A_pos_x = position_A.x()/(cm);
         G4double A_pos_y = position_A.y()/(cm);
         G4double A_pos_z = position_A.z()/(cm);
-        
-     
-        fEventAction->Add_Positions_Layer_A_x(A_pos_x);
-        fEventAction->Add_Positions_Layer_A_y(A_pos_y);
-        fEventAction->Add_Positions_Layer_A_z(A_pos_z);
+        G4int trackID_pos = step->GetTrack()->GetTrackID();       //<--- NEW
+         
+        fEventAction->Add_Positions_Layer_A(A_pos_x, A_pos_y, A_pos_z, trackID_pos);
+        /*fEventAction->Add_Positions_Layer_A_x(A_pos_x, trackID_pos);
+        fEventAction->Add_Positions_Layer_A_y(A_pos_y, trackID_pos);
+        fEventAction->Add_Positions_Layer_A_z(A_pos_z, trackID_pos);*/
       
 
          G4double edep_A = step->GetTotalEnergyDeposit();
@@ -121,11 +122,12 @@ if(particle->GetParticleName()== "mu+" ||  particle->GetParticleName() == "pi+" 
             G4double B_pos_x = position_B.x()/(cm);
             G4double B_pos_y = position_B.y()/(cm);
             G4double B_pos_z = position_B.z()/(cm);
+            G4int trackID_pos = step->GetTrack()->GetTrackID(); 
         
-     
-            fEventAction->Add_Positions_Layer_B_x(B_pos_x);
-            fEventAction->Add_Positions_Layer_B_y(B_pos_y);
-            fEventAction->Add_Positions_Layer_B_z(B_pos_z);
+            fEventAction->Add_Positions_Layer_B(B_pos_x, B_pos_y, B_pos_z, trackID_pos);
+            /*fEventAction->Add_Positions_Layer_B_x(B_pos_x, trackID_pos);
+            fEventAction->Add_Positions_Layer_B_y(B_pos_y, trackID_pos);
+            fEventAction->Add_Positions_Layer_B_z(B_pos_z, trackID_pos);*/
 
 
             G4double edep_B = step->GetTotalEnergyDeposit();
@@ -182,11 +184,12 @@ if(particle->GetParticleName()== "mu+" ||  particle->GetParticleName() == "pi+" 
          G4double A_pos_x_s = position_A_s.x()/(cm);
          G4double A_pos_y_s = position_A_s.y()/(cm);
          G4double A_pos_z_s = position_A_s.z()/(cm);
+         G4int trackID_pos = step->GetTrack()->GetTrackID();
          
-      
-         fEventAction->Add_Positions_Layer_A_x_s(A_pos_x_s);
-         fEventAction->Add_Positions_Layer_A_y_s(A_pos_y_s);
-         fEventAction->Add_Positions_Layer_A_z_s(A_pos_z_s);
+         fEventAction->Add_Positions_Layer_A_s(A_pos_x_s, A_pos_y_s, A_pos_z_s, trackID_pos);
+         /*fEventAction->Add_Positions_Layer_A_x_s(A_pos_x_s, trackID_pos);
+         fEventAction->Add_Positions_Layer_A_y_s(A_pos_y_s, trackID_pos);
+         fEventAction->Add_Positions_Layer_A_z_s(A_pos_z_s, trackID_pos);*/
        
          
           edep_A_s = step->GetTotalEnergyDeposit();
@@ -228,11 +231,12 @@ if(particle->GetParticleName()== "mu+" ||  particle->GetParticleName() == "pi+" 
          G4double B_pos_x_s = position_B_s.x()/(cm);
          G4double B_pos_y_s = position_B_s.y()/(cm);
          G4double B_pos_z_s = position_B_s.z()/(cm);
+         G4int trackID_pos = step->GetTrack()->GetTrackID();
          
-      
-         fEventAction->Add_Positions_Layer_B_x_s(B_pos_x_s);
-         fEventAction->Add_Positions_Layer_B_y_s(B_pos_y_s);
-         fEventAction->Add_Positions_Layer_B_z_s(B_pos_z_s);
+         fEventAction->Add_Positions_Layer_B_s(B_pos_x_s, B_pos_y_s, B_pos_z_s, trackID_pos);
+         /*fEventAction->Add_Positions_Layer_B_x_s(B_pos_x_s, trackID_pos);
+         fEventAction->Add_Positions_Layer_B_y_s(B_pos_y_s, trackID_pos);
+         fEventAction->Add_Positions_Layer_B_z_s(B_pos_z_s, trackID_pos);*/
 
                 
          G4double edep_B_s = step->GetTotalEnergyDeposit();

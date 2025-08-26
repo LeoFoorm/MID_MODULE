@@ -83,6 +83,18 @@ TOTAL_Detected_photons_others = 0;  //<---- NEW
     photons_detected_others_A = 0;  //<---- NEW 
     photons_detected_others_B = 0;  //<---- NEW
 
+    particle_tracks_A.clear();  //<---- NEW 
+    particle_tracks_B.clear();  //<---- NEW
+
+    particle_tracks_A_s.clear();    //<---- NEW
+    particle_tracks_B_s.clear();    //<---- NEW
+
+    particle_name_tracks_A.clear();  //<---- NEW 
+    particle_name_tracks_B.clear();  //<---- NEW
+
+    particle_name_tracks_A_s.clear();    //<---- NEW
+    particle_name_tracks_B_s.clear();    //<---- NEW
+
 }
 
 
@@ -160,6 +172,13 @@ void EventAction::BeginOfEventAction(const G4Event*)
     particle_tracks_A_s.clear();    //<---- NEW
     particle_tracks_B_s.clear();    //<---- NEW
 
+    particle_name_tracks_A.clear();  //<---- NEW 
+    particle_name_tracks_B.clear();  //<---- NEW
+
+    particle_name_tracks_A_s.clear();    //<---- NEW
+    particle_name_tracks_B_s.clear();    //<---- NEW
+
+
 
 
     pos_layer_A_x.clear();
@@ -186,6 +205,8 @@ void EventAction::BeginOfEventAction(const G4Event*)
     TOTAL_Detected_photons_others = 0;  //<---- NEW
     photons_detected_others_A = 0;  //<---- NEW
     photons_detected_others_B = 0;  //<---- NEW
+
+
 
 }
 
@@ -536,11 +557,22 @@ if (fGenerated_photons_A.size() != fGenerated_photons_B.size() ) {
     return;
 }
 
+
+G4int photons_gen_A = 0.0;
+G4int photons_gen_B = 0.0;
+G4int photons_gen_A_s = 0.0;
+G4int photons_gen_B_s = 0.0;
+
+
 for (size_t i = 0; i < fGenerated_photons_A.size(); ++i) {
-    if(fGenerated_photons_A[i]>0 && fGenerated_photons_B[i]>0){
-        TOTAL_Generated_photons += fGenerated_photons_A[i] + fGenerated_photons_B[i];
-    }
-    }
+    photons_gen_A += fGenerated_photons_A[i];
+}
+for (size_t i = 0; i < fGenerated_photons_B.size(); ++i) {
+    photons_gen_B += fGenerated_photons_B[i];
+}
+        TOTAL_Generated_photons += photons_gen_A + photons_gen_B;
+    
+    
 
     G4cout << "TOTAL GENERATED PHOTONS:  " << TOTAL_Generated_photons <<" photons "<< G4endl;
 
@@ -588,11 +620,19 @@ if (fGenerated_photons_A_s.size() != fGenerated_photons_B_s.size() ) {
     G4cerr << "Error: los tamaños de las listas no coinciden." << G4endl;
     return;
 }
+
+
 for (size_t i = 0; i < fGenerated_photons_A_s.size(); ++i) {
-    //if(fGenerated_photons_A_s[i]>0.01 && fGenerated_photons_B_s[i]>0.01){
-    TOTAL_Generated_photons_s += fGenerated_photons_B_s[i] + fGenerated_photons_A_s[i];
-    //}
+    photons_gen_A_s += fGenerated_photons_A_s[i];
 }
+for (size_t i = 0; i < fGenerated_photons_B_s.size(); ++i) {
+    photons_gen_B_s += fGenerated_photons_B_s[i];
+}
+
+    
+
+    TOTAL_Generated_photons_s += photons_gen_A_s + photons_gen_B_s;
+
 
     G4cout << "TOTAL GENERATED PHOTONS BY SECONDARIES PARTICLES:  " << TOTAL_Generated_photons_s << " photons"<<G4endl;
     man->FillNtupleDColumn(1, 198, TOTAL_Generated_photons_s); 
@@ -762,6 +802,8 @@ if (particles_names_B.empty()) {
         }}
     G4cout <<"\n" <<G4endl;
     
+
+
 
 //========================= POSITIONS ============================
 G4cout << "------------------------ POSITIONS ------------------------------------" << G4endl;
@@ -991,6 +1033,7 @@ G4cout<<"\n"<<G4endl;
 
 
 man->AddNtupleRow(1);
+man->AddNtupleRow(2);
 
 
 }
